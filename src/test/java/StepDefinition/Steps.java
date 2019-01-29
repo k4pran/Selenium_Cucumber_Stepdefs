@@ -46,14 +46,14 @@ public class Steps {
         driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
     }
 
-    @Given("^I? ?open (?:the )? ?browser$")
+    @Given("^I? ?open (?:the)? ?browser$")
     public void openBrowser() throws Throwable {
         System.setProperty("webdriver.gecko.driver", "src/test/resources/drivers/geckodriver.exe");
         driver = new FirefoxDriver();
         webDriverWait = new WebDriverWait(driver, 0);
     }
 
-    @Given("^I? ?go to url \"([^\"]*)\"$")
+    @Given("^I? ?(?:(?:go to)|(?:visit)) (?:the)? ?(?:website|url) \"([^\"]*)\"$")
     public void goToUrl(String url) throws Throwable {
         driver.get(url);
     }
@@ -139,7 +139,7 @@ public class Steps {
         selectedElement = selectedElements.get(index);
     }
 
-    @When("^I? ?(?:left)? click selected element$")
+    @When("^I? ?(?:left)? ?click selected element$")
     public void clickElement() throws Throwable {
         selectedElement.click();
     }
@@ -167,12 +167,12 @@ public class Steps {
         actions.moveToElement(selectedElement).perform();
     }
 
-    @When("^I? ?(?:enter|input) (?:the)? ?text \"([^\"]*)\"$")
+    @When("^I? ?(?:type|enter|input) (?:the text|text)? ?\"([^\"]*)\"$")
     public void enterText(String text) throws Throwable {
         selectedElement.sendKeys(text);
     }
 
-    @When("^I? ?refresh (?:the)? ?page$")
+    @When("^I? ?(?:press|select|click|click on)? (?:refresh|reload) ?(?:the)? ?(?:page)?$")
     public void refresh() throws Throwable {
         driver.navigate().refresh();
     }
@@ -269,7 +269,7 @@ public class Steps {
         selectedElements = new ArrayList<>();
     }
 
-    @Then("^I? ?close (?:the)? ?browser$")
+    @Given("^I? ?(?:close|quit)(?:(?: the)? browser)?$")
     public void closeBrowser() throws Throwable {
         driver.close();
     }
@@ -303,12 +303,6 @@ public class Steps {
         maximizeWindow();
     }
 
-
-    @Given("^I? ?(?:(?:go to)|(?:visit)) (?:the)? ?(?:website|url) \"([^\"]*)\"$")
-    public void goToUrlAlias(String url) throws Throwable {
-        goToUrl(url);
-    }
-
     @Given("^I? ?launch (?:the )? ?browser$")
     public void openBrowserAlias() throws Throwable {
         openBrowser();
@@ -319,11 +313,6 @@ public class Steps {
         openBrowser();
     }
 
-    @Given("^(?:close|quit)(?:(?: the)? browser)?$")
-    public void closeBrowserAlias() throws Throwable {
-        closeBrowser();
-    }
-
     @When("^element at index (\\d+) (?:is selected|from results is selected)$")
     public void selectFromElementsAlias(Integer index) throws Throwable {
         selectFromElements(index);
@@ -332,16 +321,6 @@ public class Steps {
     @When("^I (?:select|choose|get|grab|fetch|focus in on) element number (\\d+) from (?:results|selected elements|list|elements|group)$")
     public void selectFromElementsAlias2(Integer index) throws Throwable {
         selectFromElements(index);
-    }
-
-    @When("^I? ?(?:type|enter) (?:the text) ?\"([^\"]*)\"$")
-    public void enterTextAlias(String text) throws Throwable {
-        enterText(text);
-    }
-
-    @When("^I? ?(?:press|select|click|click on)? (?:refresh|reload) (?:the)? ?(?:page)?$")
-    public void refreshAlias() throws Throwable {
-        refresh();
     }
 
     @When("^I? ?(?:press|select|click|click on|go) back$")

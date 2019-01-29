@@ -24,7 +24,6 @@ Feature: Basic examples
     When I select elements by class name using value "SDkEP"
     Then I close the browser
 
-
   # You can also select using seleniums other selection methods such as xpath, css selector,
   # link text and partial link text
 
@@ -100,6 +99,7 @@ Feature: Basic examples
     Given I open the browser
       And go to url "https://www.google.com/"
     When I refresh the page
+    Then I close the browser
 
   Scenario: Go back a page
     Given I open the browser
