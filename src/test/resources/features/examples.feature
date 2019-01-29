@@ -65,7 +65,7 @@ Feature: Basic examples
 
   Scenario: Check current page title
     Given I open the browser
-    And go to url "https://www.google.com/"
+      And go to url "https://www.google.com/"
     Then I check the page title is "Google"
       And close the browser
 

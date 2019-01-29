@@ -31,17 +31,17 @@ public class Steps {
         // todo
     }
 
-    @Given("^implicit wait is set to (\\d+) nanoseconds")
+    @Given("^implicit wait is set to (\\d+) nanoseconds$")
     public void setImplicitWaitNano(long nanos) throws Throwable {
         driver.manage().timeouts().implicitlyWait(nanos, TimeUnit.NANOSECONDS);
     }
 
-    @Given("^implicit wait is set to (\\d+) milliseconds")
+    @Given("^implicit wait is set to (\\d+) milliseconds$")
     public void setImplicitWaitMs(long ms) throws Throwable {
         driver.manage().timeouts().implicitlyWait(ms, TimeUnit.MILLISECONDS);
     }
 
-    @Given("^implicit wait is set to (\\d+) seconds")
+    @Given("^implicit wait is set to (\\d+) seconds$")
     public void setImplicitWaitSeconds(long seconds) throws Throwable {
         driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
     }
@@ -58,7 +58,7 @@ public class Steps {
         driver.get(url);
     }
 
-    @Given("^window is maximized$")
+    @Given("^(?:the)? ?window is maximized$")
     public void maximizeWindow() throws Throwable {
         driver.manage().window().maximize();
     }
@@ -139,7 +139,7 @@ public class Steps {
         selectedElement = selectedElements.get(index);
     }
 
-    @When("^I? ?click selected element$")
+    @When("^I? ?(?:left)? click selected element$")
     public void clickElement() throws Throwable {
         selectedElement.click();
     }
@@ -156,23 +156,23 @@ public class Steps {
         actions.clickAndHold(selectedElement).perform();
     }
 
-    @When("^I? ?submit form$")
+    @When("^I? ?submit(?: form)?$")
     public void submit() throws Throwable {
         selectedElement.submit();
     }
 
-    @When("^I? ?hover over selected element$")
+    @When("^I? ?(?:(?:hover over)|(?:move to)) (?:the)? ?selected element$")
     public void hoverElement() throws Throwable {
         Actions actions = new Actions(driver);
         actions.moveToElement(selectedElement).perform();
     }
 
-    @When("^I? ?enter the text \"([^\"]*)\"$")
+    @When("^I? ?(?:enter|input) (?:the)? ?text \"([^\"]*)\"$")
     public void enterText(String text) throws Throwable {
         selectedElement.sendKeys(text);
     }
 
-    @When("^I? ?refresh the page$")
+    @When("^I? ?refresh (?:the)? ?page$")
     public void refresh() throws Throwable {
         driver.navigate().refresh();
     }
@@ -199,62 +199,62 @@ public class Steps {
         actions.pause(Duration.ofSeconds(seconds));
     }
 
-    @Then("^I? ?check current url is \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?current url is \"([^\"]*)\"$")
     public void checkCurrentUrl(String expectedUrl) throws Throwable {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
 
-    @Then("^I? ?check current url contains \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?current url contains \"([^\"]*)\"$")
     public void checkCurrentUrlContains(String urlPart) throws Throwable {
         assertThat(driver.getCurrentUrl(), CoreMatchers.containsString(urlPart));
     }
 
-    @Then("^I? ?check the page title is \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?page title is \"([^\"]*)\"$")
     public void checkPageTitle(String pageTitle) throws Throwable {
         assertEquals(pageTitle, driver.getTitle());
     }
 
-    @Then("^I? ?check the page title contains \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?page title contains \"([^\"]*)\"$")
     public void checkPageTitleContains(String expectedTitlePart) throws Throwable {
         assertThat(driver.getTitle(), CoreMatchers.containsString(expectedTitlePart));
     }
 
-    @Then("^I? ?check the element's inner text is equal to \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?element's inner text is equal to \"([^\"]*)\"$")
     public void checkInnerText(String expectedText) throws Throwable {
         assertEquals(expectedText, selectedElement.getText());
     }
 
-    @Then("^I? ?check the element's inner text contains \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?element's inner text contains \"([^\"]*)\"$")
     public void checkInnerTextContains(String expectedSubText) throws Throwable {
         assertThat(selectedElement.getText(), CoreMatchers.containsString(expectedSubText));
     }
 
-    @Then("^I? ?check attribute \"([^\"]*)\" exists")
+    @Then("^I? ?check (?:the)? ?attribute \"([^\"]*)\" exists$")
     public void checkAttributeExists(String attribute) throws Throwable {
         // todo
     }
 
-    @Then("^I? ?check the element's attribute \"([^\"]*)\" is equal to \"([^\"]*)\"")
+    @Then("^I? ?check (?:the)? ?element's attribute \"([^\"]*)\" is equal to \"([^\"]*)\"$")
     public void checkAttributeValue(String attribute, String value) throws Throwable {
         assertEquals(value, selectedElement.getAttribute(attribute));
     }
 
-    @Then("^I? ?check the number of elements found is (\\d+)")
+    @Then("^I? ?check (?:the)? ?number of elements found is (\\d+)$")
     public void checkPageTitleContains(int expectedCount) throws Throwable {
         assertEquals(expectedCount, selectedElements.size());
     }
 
-    @Then("^I? ?check the element is displayed")
+    @Then("^I? ?check (?:the)? ?element is displayed$")
     public void checkElementIsDisplayed() throws Throwable {
         assertTrue(selectedElement.isDisplayed());
     }
 
-    @Then("^I? ?check the element is selected")
+    @Then("^I? ?check (?:the)? ?element is selected$")
     public void checkElementIsSelected() throws Throwable {
         assertTrue(selectedElement.isSelected());
     }
 
-    @Then("^I? ?check the element is enabled")
+    @Then("^I? ?check (?:the)? ?element is enabled$")
     public void checkElementIsEnabled() throws Throwable {
         assertTrue(selectedElement.isEnabled());
     }
@@ -263,14 +263,94 @@ public class Steps {
      * Clears both selectedElements list and the single selectedElement
      * @throws Throwable
      */
-    @Then("^I? ?clear selected elements$")
+    @Then("^I? ?clear (?:the)? ?selected elements$")
     public void clearSelectedElements() throws Throwable {
         selectedElement = null;
         selectedElements = new ArrayList<>();
     }
 
-    @Then("^I? ?close the browser$")
+    @Then("^I? ?close (?:the)? ?browser$")
     public void closeBrowser() throws Throwable {
         driver.close();
+    }
+
+    //-------------------------//
+    //         ALIASES         //
+    //-------------------------//
+
+    @Given("^I (?:choose|select|am using) ?(?:the)? driver \"([^\"]*)\"$")
+    public void selectDriverAlias(WebElement webElement) throws Throwable {
+        selectDriver(webElement);
+    }
+
+    @Given("^I? ?set implicit wait to (\\d+) nanoseconds$")
+    public void setImplicitWaitNanoAlias(long nanos) throws Throwable {
+        setImplicitWaitNano(nanos);
+    }
+
+    @Given("^I? ?set implicit wait to (\\d+) milliseconds$")
+    public void setImplicitWaitMsAlias(long ms) throws Throwable {
+        setImplicitWaitMs(ms);
+    }
+
+    @Given("^I? ?set implicit wait to (\\d+) seconds$")
+    public void setImplicitWaitSecondsAlias(long seconds) throws Throwable {
+        setImplicitWaitSeconds(seconds);
+    }
+
+    @Given("^I? ?maximize (?:the)? ?window$")
+    public void maximizeWindowAlias() throws Throwable {
+        maximizeWindow();
+    }
+
+
+    @Given("^I? ?(?:(?:go to)|(?:visit)) (?:the)? ?(?:website|url) \"([^\"]*)\"$")
+    public void goToUrlAlias(String url) throws Throwable {
+        goToUrl(url);
+    }
+
+    @Given("^I? ?launch (?:the )? ?browser$")
+    public void openBrowserAlias() throws Throwable {
+        openBrowser();
+    }
+
+    @Given("^(?:the)? ?browser (?:is|has been) (?:launched|(?:opened|open))$")
+    public void openBrowserAlias2() throws Throwable {
+        openBrowser();
+    }
+
+    @Given("^(?:close|quit)(?:(?: the)? browser)?$")
+    public void closeBrowserAlias() throws Throwable {
+        closeBrowser();
+    }
+
+    @When("^element at index (\\d+) (?:is selected|from results is selected)$")
+    public void selectFromElementsAlias(Integer index) throws Throwable {
+        selectFromElements(index);
+    }
+
+    @When("^I (?:select|choose|get|grab|fetch|focus in on) element number (\\d+) from (?:results|selected elements|list|elements|group)$")
+    public void selectFromElementsAlias2(Integer index) throws Throwable {
+        selectFromElements(index);
+    }
+
+    @When("^I? ?(?:type|enter) (?:the text) ?\"([^\"]*)\"$")
+    public void enterTextAlias(String text) throws Throwable {
+        enterText(text);
+    }
+
+    @When("^I? ?(?:press|select|click|click on)? (?:refresh|reload) (?:the)? ?(?:page)?$")
+    public void refreshAlias() throws Throwable {
+        refresh();
+    }
+
+    @When("^I? ?(?:press|select|click|click on|go) back$")
+    public void backAlias() throws Throwable {
+        back();
+    }
+
+    @When("^I? ?(?:press|select|click|click on|go) forward$")
+    public void forwardAlias() throws Throwable {
+        forward();
     }
 }
