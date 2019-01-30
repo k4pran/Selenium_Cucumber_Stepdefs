@@ -4,6 +4,11 @@ Feature: Basic examples
     Given I open the browser
     Then I close the browser
 
+  Scenario: Open the browser
+    Given "chrome" browser is open
+    Then I close the browser
+
+
   Scenario: Open browser and go to url
     Given I open the browser
     # The 'I' is optional to make the grammar more readable for chained keywords
