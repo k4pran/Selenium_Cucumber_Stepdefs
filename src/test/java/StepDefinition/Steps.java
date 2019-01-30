@@ -9,10 +9,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,12 +21,12 @@ import static org.junit.Assert.*;
 public class Steps {
 
     private WebDriver driver;
-    private WebDriverWait webDriverWait;
 
+    private HashMap<String, WebElement> namedElements = new HashMap<>();
     private List<WebElement> selectedElements = new ArrayList<>();
     private WebElement selectedElement;
 
-    @Given("^I select driver \"([^\"]*)\"")
+    @Given("^I select driver \"([^\"]*)\"$")
     public void selectDriver(WebElement webElement) throws Throwable {
         // todo
     }
@@ -50,7 +50,6 @@ public class Steps {
     public void openBrowser() throws Throwable {
         System.setProperty("webdriver.gecko.driver", "src/test/resources/drivers/geckodriver.exe");
         driver = new FirefoxDriver();
-        webDriverWait = new WebDriverWait(driver, 0);
     }
 
     @Given("^I? ?(?:(?:go to)|(?:visit)) (?:the)? ?(?:website|url) \"([^\"]*)\"$")
@@ -139,6 +138,11 @@ public class Steps {
         selectedElement = selectedElements.get(index);
     }
 
+    @When("^I? ?select (?:the)? ?named element \"([^\"]*)\"$")
+    public void selectNamedElement(String elementName) throws Throwable {
+        selectedElement = namedElements.get(elementName);
+    }
+
     @When("^I? ?(?:left)? ?click selected element$")
     public void clickElement() throws Throwable {
         selectedElement.click();
@@ -199,6 +203,11 @@ public class Steps {
         actions.pause(Duration.ofSeconds(seconds));
     }
 
+    @When("^I? ?name (?:the)? ?selected element as \"([^\"]*)\"$")
+    public void nameSelectedElement(String elementName) {
+        namedElements.put(elementName, selectedElement);
+    }
+
     @Then("^I? ?check (?:the)? ?current url is \"([^\"]*)\"$")
     public void checkCurrentUrl(String expectedUrl) throws Throwable {
         assertEquals(expectedUrl, driver.getCurrentUrl());
@@ -230,13 +239,19 @@ public class Steps {
     }
 
     @Then("^I? ?check (?:the)? ?attribute \"([^\"]*)\" exists$")
-    public void checkAttributeExists(String attribute) throws Throwable {
-        // todo
+    public void iCheckAttributeExists(String attribute) throws Throwable {
+        String expectedAttribute = selectedElement.getAttribute(attribute);
+        assertNotNull(expectedAttribute);
     }
 
     @Then("^I? ?check (?:the)? ?element's attribute \"([^\"]*)\" is equal to \"([^\"]*)\"$")
     public void checkAttributeValue(String attribute, String value) throws Throwable {
         assertEquals(value, selectedElement.getAttribute(attribute));
+    }
+
+    @Then("^I? ?check (?:the)? ?element's attribute \"([^\"]*)\" contains \"([^\"]*)\"$")
+    public void checkAttributeValueContains(String attribute, String value) throws Throwable {
+        assertThat(selectedElement.getAttribute(attribute), CoreMatchers.containsString(value));
     }
 
     @Then("^I? ?check (?:the)? ?number of elements found is (\\d+)$")
@@ -267,6 +282,15 @@ public class Steps {
     public void clearSelectedElements() throws Throwable {
         selectedElement = null;
         selectedElements = new ArrayList<>();
+    }
+
+    /**
+     * Clears only named elements
+     * @throws Throwable
+     */
+    @Then("^I? ?clear (?:the)? ?named elements$")
+    public void clearNamedElements() throws Throwable {
+        namedElements = new HashMap<>();
     }
 
     @Given("^I? ?(?:close|quit)(?:(?: the)? browser)?$")

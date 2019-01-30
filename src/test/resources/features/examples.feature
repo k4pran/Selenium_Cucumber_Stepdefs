@@ -107,6 +107,7 @@ Feature: Basic examples
       And go to url "http://www.bing.com/"
     When I go back a page
     Then I check current url is "https://www.google.com/"
+      And I close the browser
 
   Scenario: Go forward a page
     Given I open the browser
@@ -115,3 +116,29 @@ Feature: Basic examples
     When I go back a page
       And I go forward a page
     Then I check current url is "https://www.google.com/"
+      And I close the browser
+
+  Scenario: Clear elements
+    # Clears both selectedElement and selectedElements
+    Given I open the browser
+      And go to url "https://www.google.com/"
+    When I select element by xpath using value "/html/body/div/div[3]/form/div[2]/div/div[1]/div/div[1]/input"
+      And I clear the selected elements
+    Then I close the browser
+
+  Scenario: Naming elements then selecting them
+    Given I open the browser
+      And go to url "https://www.google.com/"
+    When I select element by xpath using value "/html/body/div/div[3]/form/div[2]/div/div[1]/div/div[1]/input"
+      And I name the selected element as "myElement"
+      And I select the named element "myElement"
+      And enter the text "Hello"
+    Then I close the browser
+
+  Scenario: Checking an attribute exists and contains a value
+    Given I open the browser
+      And go to url "https://www.google.com/"
+    When I select element by id using value "hplogo"
+    Then I check the attribute "src" exists
+      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I close the browser
