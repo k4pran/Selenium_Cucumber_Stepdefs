@@ -1,5 +1,8 @@
 Feature: Aliases to allow multiple ways of expressing the same thing
 
+# NOTE:- Many of these scenarios will fail and intended for viewing some of the different expressions that are possible
+# This list is also not exhaustive
+
   Scenario: Go to url aliases
     Given I open the browser
       And I go to the website "https://www.google.com/"
@@ -30,7 +33,7 @@ Feature: Aliases to allow multiple ways of expressing the same thing
       And I refresh page
       And select refresh
       And I press refresh page
-      And refresh page
+      And I refresh page
       And I click on refresh
 
   Scenario: Entering text

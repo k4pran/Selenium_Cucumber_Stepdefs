@@ -140,6 +140,30 @@ Feature: Basic examples
       And enter the text "Hello"
     Then I close the browser
 
+  Scenario: Expecting a failure
+    Given I open the browser
+      And go to url "https://www.google.com/"
+    When I select element by xpath using value "/html/body/div/div[3]/form/div[2]/div/div[1]/div/div[1]/input"
+    # Text box no longer attached to dom and so expect a failure
+      And a failure is expected
+      And I visit the url "https://www.bing.com/"
+      And enter the text "Hello"
+    Then I check if a failure has occurred
+      And close the browser
+
+  # You can also clear failures if you want to check another failure has occurred and so want to forget previous ones.
+    Given I open the browser
+      And go to url "https://www.google.com/"
+    When I select element by xpath using value "/html/body/div/div[3]/form/div[2]/div/div[1]/div/div[1]/input"
+    # Text box no longer attached to dom and so expect a failure
+      And a failure is expected
+      And I visit the url "https://www.bing.com/"
+      And enter the text "Hello"
+    Then I check if a failure has occurred
+    Then I ignore the previous failures
+      # Checking if a failure has occurred at this point will now fail
+      And close the browser
+
   Scenario: Checking an attribute exists and contains a value
     Given I open the browser
       And go to url "https://www.google.com/"
