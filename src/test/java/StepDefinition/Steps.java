@@ -21,6 +21,17 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
+/**
+ * Step definitions for performing basic selenium tasks
+ * Most actions are performed on the <b>selectedElement</b> property.
+ * Multiple WebElements can be found and stored in <b></b>selectedElements</b> and then moved into selectedElement
+ * WebElements can also be named and referenced by storing them in <b>namedElements</b>
+ *
+ * The negative path can be tested by utilising 'a failure is expected' step definition. This prevents a test
+ * failing when an exception is thrown and instead you can query if a failure has occurred and pass the cucumber
+ * test based on an expected failure.
+ */
+
 public class Steps {
 
     private WebDriver driver;
@@ -64,6 +75,10 @@ public class Steps {
         driver = new FirefoxDriver();
     }
 
+    /**
+     * Opens a url
+     * @param url should be a fully qualified url such as https://www.google.com rather than google.com
+     */
     @Given("^I? ?(?:(?:go to)|(?:visit)) (?:the)? ?(?:website|url) \"([^\"]*)\"$")
     public void goToUrl(String url) {
         if (failureExpected) {
@@ -79,11 +94,19 @@ public class Steps {
         }
     }
 
+    /**
+     * Sets failureExpected flag to true
+     * While failureExpected == true some exceptions will be caught and stored to be queried after
+     * Exceptions that are caught are generally in methods you will want to test the negative path
+     */
     @Given("^a? ?failure is expected$")
     public void expectFailure() {
         failureExpected = true;
     }
 
+    /**
+     * Sets failureExpected flag to false so that exceptions are no longer caught - aka failure is not expected.
+     */
     @Given("^a? ?failure is not expected$")
     public void expectNoFailure() {
         failureExpected = false;
@@ -94,8 +117,18 @@ public class Steps {
         driver.manage().window().maximize();
     }
 
+    //-------------------------//
+    //    Selector methods     //
+    //-------------------------//
+
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by css selector using value \"([^\"]*)\"$")
-    public void selectElementByCss(String selector) {
+    public void selectElementByCss(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(selector)) :
@@ -110,8 +143,16 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected elements will be stored in selectedElements and any of these can be assigned to selectedElement
+     * by calling selectFromElements(int index) step definition.
+     * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
+     * remain consistent with the selectElementBy... methods.
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select elements by css selector using value \"([^\"]*)\"$")
-    public void selectElementsByCss(String selector) {
+    public void selectElementsByCss(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElements = selectedElement == null ? driver.findElements(By.cssSelector(selector)) :
@@ -129,8 +170,14 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by xpath using value \"([^\"]*)\"$")
-    public void selectElementByXpath(String selector) {
+    public void selectElementByXpath(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.xpath(selector)) :
@@ -146,8 +193,16 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected elements will be stored in selectedElements and any of these can be assigned to selectedElement
+     * by calling selectFromElements(int index) step definition.
+     * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
+     * remain consistent with the selectElementBy... methods.
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select elements by xpath using value \"([^\"]*)\"$")
-    public void selectElementsByXpath(String selector) {
+    public void selectElementsByXpath(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElements = selectedElement == null ? driver.findElements(By.xpath(selector)) :
@@ -165,8 +220,14 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by id using value \"([^\"]*)\"$")
-    public void selectElementById(String selector) {
+    public void selectElementById(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.id(selector)) :
@@ -182,8 +243,14 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by tag using value \"([^\"]*)\"$")
-    public void selectElementByTag(String selector) {
+    public void selectElementByTag(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.tagName(selector)) :
@@ -199,8 +266,16 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected elements will be stored in selectedElements and any of these can be assigned to selectedElement
+     * by calling selectFromElements(int index) step definition.
+     * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
+     * remain consistent with the selectElementBy... methods.
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select elements by tag using value \"([^\"]*)\"$")
-    public void selectElementsByTag(String selector) {
+    public void selectElementsByTag(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElements = selectedElement == null ? driver.findElements(By.tagName(selector)) :
@@ -218,8 +293,15 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * If multiple elements are found the first element will be assigned to selectedElement
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by class name using value \"([^\"]*)\"$")
-    public void selectElementByClassName(String selector) {
+    public void selectElementByClassName(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.className(selector)) :
@@ -235,8 +317,16 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected elements will be stored in selectedElements and any of these can be assigned to selectedElement
+     * by calling selectFromElements(int index) step definition.
+     * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
+     * remain consistent with the selectElementBy... methods.
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select elements by class name using value \"([^\"]*)\"$")
-    public void selectElementsByClassName(String selector) {
+    public void selectElementsByClassName(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElements = selectedElement == null ? driver.findElements(By.className(selector)) :
@@ -254,8 +344,14 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by link text using value \"([^\"]*)\"$")
-    public void selectElementByLinkText(String selector) {
+    public void selectElementByLinkText(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.linkText(selector)) :
@@ -271,8 +367,14 @@ public class Steps {
         }
     }
 
+    /**
+     * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
+     * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     * @param selector a string that targets an element in the dom.
+     * @throws NoSuchElementException when no element is not found
+     */
     @When("^I? ?select element by partial link text using value \"([^\"]*)\"$")
-    public void selectElementByPartialLinkText(String selector) {
+    public void selectElementByPartialLinkText(String selector) throws NoSuchElementException {
         if (failureExpected) {
             try {
                 selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(selector)) :
@@ -297,6 +399,10 @@ public class Steps {
         selectedElement = selectedElements.get(index);
     }
 
+    /**
+     * If the named element exists it will become the selectedElement so that actions can be performed on it
+     * @param elementName alias to be selected
+     */
     @When("^I? ?select (?:the)? ?named element \"([^\"]*)\"$")
     public void selectNamedElement(String elementName) {
         selectedElement = namedElements.get(elementName);
@@ -352,6 +458,9 @@ public class Steps {
         }
     }
 
+    /**
+     * Convenience method - Submit a form if element is contained within a form
+     */
     @When("^I? ?submit(?: form)?$")
     public void submit() {
         if (failureExpected) {
@@ -478,6 +587,9 @@ public class Steps {
         assertThat(selectedElement.getAttribute(attribute), CoreMatchers.containsString(value));
     }
 
+    /**
+     * @param expectedCount expected number of elements in selectedElements
+     */
     @Then("^I? ?check (?:the)? ?number of elements found is (\\d+)$")
     public void checkPageTitleContains(int expectedCount) {
         assertEquals(expectedCount, selectedElements.size());
@@ -523,6 +635,10 @@ public class Steps {
         exceptions = new ArrayList<>();
     }
 
+    /**
+     * Does not look for specific exception. Checks if any exception have been caught after calling 'a failure is
+     * expected' step definition.
+     */
     @Then("^I? ?check (?:to see)? ?if a? ?failure has occurred$")
     public void checkForFailure() {
         assertNotEquals(0, exceptions.size());
@@ -599,7 +715,12 @@ public class Steps {
 
     // Utility methods
 
-    private void launchBrowser(String browserName) throws Throwable {
+    /**
+     * Initiates the specified browser driver
+     * @param browserName name of the browser
+     * @throws SeleniumStepException if browser is not supported
+     */
+    private void launchBrowser(String browserName) throws SeleniumStepException {
         if(browserName.equalsIgnoreCase("Firefox")) {
             System.setProperty("webdriver.gecko.driver", "src/test/resources/drivers/geckodriver.exe");
             driver = new FirefoxDriver();
