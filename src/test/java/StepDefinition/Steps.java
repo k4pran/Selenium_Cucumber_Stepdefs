@@ -27,6 +27,11 @@ import static org.junit.Assert.*;
  * Multiple WebElements can be found and stored in <b></b>selectedElements</b> and then moved into selectedElement
  * WebElements can also be named and referenced by storing them in <b>namedElements</b>
  *
+ * When selecting elements, if <b>selectedElement</b> is null then the whole dom hierarchy will be searched. If
+ * it is not null then the select methods will be actioned relative to the currently selected element. If you
+ * have selected an element and then afterwards want to search the whole dom then make sure to clear the selected
+ * element (and giving it an alias to add into namedElements if you want to use it later)
+ *
  * The negative path can be tested by utilising 'a failure is expected' step definition. This prevents a test
  * failing when an exception is thrown and instead you can query if a failure has occurred and pass the cucumber
  * test based on an expected failure.
@@ -408,7 +413,7 @@ public class Steps {
         selectedElement = namedElements.get(elementName);
     }
 
-    @When("^I? ?(?:left)? ?click selected element$")
+    @When("^I? ?(?:left)? ?click (?:the)? ?selected element$")
     public void clickElement() {
         if (failureExpected) {
             try {
