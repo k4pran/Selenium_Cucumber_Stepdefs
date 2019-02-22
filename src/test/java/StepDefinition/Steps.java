@@ -1,5 +1,6 @@
 package StepDefinition;
 
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -31,10 +32,6 @@ import static org.junit.Assert.*;
  * it is not null then the select methods will be actioned relative to the currently selected element. If you
  * have selected an element and then afterwards want to search the whole dom then make sure to clear the selected
  * element (and giving it an alias to add into namedElements if you want to use it later)
- *
- * The negative path can be tested by utilising 'a failure is expected' step definition. This prevents a test
- * failing when an exception is thrown and instead you can query if a failure has occurred and pass the cucumber
- * test based on an expected failure.
  */
 
 public class Steps {
@@ -44,14 +41,10 @@ public class Steps {
     private HashMap<String, WebElement> namedElements;
     private List<WebElement> selectedElements;
     private WebElement selectedElement;
-    private List<Exception> exceptions;
-    private boolean failureExpected;
 
     public Steps() {
         this.namedElements = new HashMap<>();
         this.selectedElements = new ArrayList<>();
-        exceptions = new ArrayList<>();
-        this.failureExpected = false;
     }
 
     @Given("(?:the)? ?\"([^\"]*)\" browser is open")
@@ -86,35 +79,7 @@ public class Steps {
      */
     @Given("^I? ?(?:(?:go to)|(?:visit)) (?:the)? ?(?:website|url) \"([^\"]*)\"$")
     public void goToUrl(String url) {
-        if (failureExpected) {
-            try {
-                driver.get(url);
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            driver.get(url);
-        }
-    }
-
-    /**
-     * Sets failureExpected flag to true
-     * While failureExpected == true some exceptions will be caught and stored to be queried after
-     * Exceptions that are caught are generally in methods you will want to test the negative path
-     */
-    @Given("^a? ?failure is expected$")
-    public void expectFailure() {
-        failureExpected = true;
-    }
-
-    /**
-     * Sets failureExpected flag to false so that exceptions are no longer caught - aka failure is not expected.
-     */
-    @Given("^a? ?failure is not expected$")
-    public void expectNoFailure() {
-        failureExpected = false;
+        driver.get(url);
     }
 
     @Given("^(?:the)? ?window is maximized$")
@@ -134,18 +99,8 @@ public class Steps {
      */
     @When("^I? ?select element by css selector using value \"([^\"]*)\"$")
     public void selectElementByCss(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(selector)) :
-                        selectedElement.findElement(By.cssSelector(selector));            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(selector)) :
+        selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(selector)) :
                     selectedElement.findElement(By.cssSelector(selector));
-        }
     }
 
     /**
@@ -158,21 +113,8 @@ public class Steps {
      */
     @When("^I? ?select elements by css selector using value \"([^\"]*)\"$")
     public void selectElementsByCss(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElements = selectedElement == null ? driver.findElements(By.cssSelector(selector)) :
-                        selectedElement.findElements(By.cssSelector(selector));
-                if (selectedElements.size() == 0) { throw new NoSuchElementException(
-                        "No elements found with given selector - " + selector); }
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElements = selectedElement == null ? driver.findElements(By.cssSelector(selector)) :
-                    selectedElement.findElements(By.cssSelector(selector));
-        }
+        selectedElements = selectedElement == null ? driver.findElements(By.cssSelector(selector)) :
+                selectedElement.findElements(By.cssSelector(selector));
     }
 
     /**
@@ -183,19 +125,8 @@ public class Steps {
      */
     @When("^I? ?select element by xpath using value \"([^\"]*)\"$")
     public void selectElementByXpath(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.xpath(selector)) :
-                        selectedElement.findElement(By.xpath(selector));
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.xpath(selector)) :
-                    selectedElement.findElement(By.xpath(selector));
-        }
+        selectedElement = selectedElement == null ? driver.findElement(By.xpath(selector)) :
+                selectedElement.findElement(By.xpath(selector));
     }
 
     /**
@@ -208,21 +139,8 @@ public class Steps {
      */
     @When("^I? ?select elements by xpath using value \"([^\"]*)\"$")
     public void selectElementsByXpath(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElements = selectedElement == null ? driver.findElements(By.xpath(selector)) :
-                        selectedElement.findElements(By.xpath(selector));
-                if (selectedElements.size() == 0) { throw new NoSuchElementException(
-                        "No elements found with given selector - " + selector); }
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElements = selectedElement == null ? driver.findElements(By.xpath(selector)) :
-                    selectedElement.findElements(By.xpath(selector));
-        }
+        selectedElements = selectedElement == null ? driver.findElements(By.xpath(selector)) :
+                selectedElement.findElements(By.xpath(selector));
     }
 
     /**
@@ -233,19 +151,8 @@ public class Steps {
      */
     @When("^I? ?select element by id using value \"([^\"]*)\"$")
     public void selectElementById(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.id(selector)) :
-                        selectedElement.findElement(By.id(selector));
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.id(selector)) :
-                    selectedElement.findElement(By.id(selector));
-        }
+        selectedElement = selectedElement == null ? driver.findElement(By.id(selector)) :
+                selectedElement.findElement(By.id(selector));
     }
 
     /**
@@ -256,19 +163,8 @@ public class Steps {
      */
     @When("^I? ?select element by tag using value \"([^\"]*)\"$")
     public void selectElementByTag(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.tagName(selector)) :
-                        selectedElement.findElement(By.tagName(selector));
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.tagName(selector)) :
-                    selectedElement.findElement(By.tagName(selector));
-        }
+        selectedElement = selectedElement == null ? driver.findElement(By.tagName(selector)) :
+                selectedElement.findElement(By.tagName(selector));
     }
 
     /**
@@ -281,21 +177,8 @@ public class Steps {
      */
     @When("^I? ?select elements by tag using value \"([^\"]*)\"$")
     public void selectElementsByTag(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElements = selectedElement == null ? driver.findElements(By.tagName(selector)) :
-                        selectedElement.findElements(By.tagName(selector));
-                if (selectedElements.size() == 0) { throw new NoSuchElementException(
-                        "No elements found with given selector - " + selector); }
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElements = selectedElement == null ? driver.findElements(By.tagName(selector)) :
-                    selectedElement.findElements(By.tagName(selector));
-        }
+        selectedElements = selectedElement == null ? driver.findElements(By.tagName(selector)) :
+                selectedElement.findElements(By.tagName(selector));
     }
 
     /**
@@ -307,19 +190,8 @@ public class Steps {
      */
     @When("^I? ?select element by class name using value \"([^\"]*)\"$")
     public void selectElementByClassName(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.className(selector)) :
-                        selectedElement.findElement(By.className(selector));
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.className(selector)) :
-                    selectedElement.findElement(By.className(selector));
-        }
+        selectedElement = selectedElement == null ? driver.findElement(By.className(selector)) :
+                selectedElement.findElement(By.className(selector));
     }
 
     /**
@@ -332,21 +204,8 @@ public class Steps {
      */
     @When("^I? ?select elements by class name using value \"([^\"]*)\"$")
     public void selectElementsByClassName(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElements = selectedElement == null ? driver.findElements(By.className(selector)) :
-                        selectedElement.findElements(By.className(selector));
-                if (selectedElements.size() == 0) { throw new NoSuchElementException(
-                        "No elements found with given selector - " + selector); }
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElements = selectedElement == null ? driver.findElements(By.className(selector)) :
-                    selectedElement.findElements(By.className(selector));
-        }
+        selectedElements = selectedElement == null ? driver.findElements(By.className(selector)) :
+                selectedElement.findElements(By.className(selector));
     }
 
     /**
@@ -357,19 +216,8 @@ public class Steps {
      */
     @When("^I? ?select element by link text using value \"([^\"]*)\"$")
     public void selectElementByLinkText(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.linkText(selector)) :
-                        selectedElement.findElement(By.linkText(selector));
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.linkText(selector)) :
-                    selectedElement.findElement(By.linkText(selector));
-        }
+        selectedElement = selectedElement == null ? driver.findElement(By.linkText(selector)) :
+                selectedElement.findElement(By.linkText(selector));
     }
 
     /**
@@ -380,19 +228,8 @@ public class Steps {
      */
     @When("^I? ?select element by partial link text using value \"([^\"]*)\"$")
     public void selectElementByPartialLinkText(String selector) throws NoSuchElementException {
-        if (failureExpected) {
-            try {
-                selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(selector)) :
-                        selectedElement.findElement(By.partialLinkText(selector));
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(selector)) :
-                    selectedElement.findElement(By.partialLinkText(selector));
-        }
+        selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(selector)) :
+                selectedElement.findElement(By.partialLinkText(selector));
     }
 
     /**
@@ -402,6 +239,16 @@ public class Steps {
     @When("^I? ?select index (\\d+) from selected elements$")
     public void selectFromElements(Integer index) {
         selectedElement = selectedElements.get(index);
+    }
+
+    @When("^I? ?filter selected elements by xpath using value \"([^\"]*)\"$")
+    public void filterSelectedElementsByXPath(String filter) {
+        selectedElements.removeIf(element -> element.findElements(By.xpath(filter)).size() == 0);
+    }
+
+    @When("^I? ?filter selected elements based on if their descendents contain the text \"([^\"]*)\"$")
+    public void filterSelectedElementsByText(String filterText) {
+        selectedElements.removeIf(element -> element.findElements(By.xpath(".//*[contains(text(),'" + filterText + "')]")).size() == 0);
     }
 
     /**
@@ -415,52 +262,19 @@ public class Steps {
 
     @When("^I? ?(?:left)? ?click (?:the)? ?selected element$")
     public void clickElement() {
-        if (failureExpected) {
-            try {
-                selectedElement.click();
-
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement.click();
-        }
+        selectedElement.click();
     }
 
     @When("^I? ?double click selected element$")
     public void doubleClickElement() {
-        if (failureExpected) {
-            try {
-                Actions actions = new Actions(driver);
-                actions.doubleClick(selectedElement).perform();
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            Actions actions = new Actions(driver);
-            actions.doubleClick(selectedElement).perform();
-        }
+        Actions actions = new Actions(driver);
+        actions.doubleClick(selectedElement).perform();
     }
 
     @When("^I? ?click and hold element$")
     public void clickAndHold() {
-        if (failureExpected) {
-            try {
-                Actions actions = new Actions(driver);
-                actions.clickAndHold(selectedElement).perform();
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            Actions actions = new Actions(driver);
-            actions.clickAndHold(selectedElement).perform();
-        }
+        Actions actions = new Actions(driver);
+        actions.clickAndHold(selectedElement).perform();
     }
 
     /**
@@ -468,50 +282,18 @@ public class Steps {
      */
     @When("^I? ?submit(?: form)?$")
     public void submit() {
-        if (failureExpected) {
-            try {
-                selectedElement.submit();
-
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement.submit();
-        }
+        selectedElement.submit();
     }
 
     @When("^I? ?(?:(?:hover over)|(?:move to)) (?:the)? ?selected element$")
     public void hoverElement() {
-        if (failureExpected) {
-            try {
-                Actions actions = new Actions(driver);
-                actions.moveToElement(selectedElement).perform();
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            Actions actions = new Actions(driver);
-            actions.moveToElement(selectedElement).perform();
-        }
+        Actions actions = new Actions(driver);
+        actions.moveToElement(selectedElement).perform();
     }
 
     @When("^I? ?(?:type|enter|input) (?:the text|text)? ?\"([^\"]*)\"$")
     public void enterText(String text) {
-        if (failureExpected) {
-            try {
-                selectedElement.sendKeys(text);
-            }
-            catch (Exception e) {
-                exceptions.add(e);
-            }
-        }
-        else {
-            selectedElement.sendKeys(text);
-        }
+        selectedElement.sendKeys(text);
     }
 
     @When("^I? ?(?:press|select|click|click on)? ?(?:refresh|reload) ?(?:the)? ?(?:page)?$")
@@ -546,6 +328,12 @@ public class Steps {
         namedElements.put(elementName, selectedElement);
     }
 
+    // Temporary method until explicit waits are implemented
+    @When("^a (\\d+) second pause$")
+    public void pause(int seconds) throws InterruptedException {
+        Thread.sleep(seconds * 1000);
+    }
+
     @Then("^I? ?check (?:the)? ?current url is \"([^\"]*)\"$")
     public void checkCurrentUrl(String expectedUrl) {
         assertEquals(expectedUrl, driver.getCurrentUrl());
@@ -566,6 +354,19 @@ public class Steps {
         assertThat(driver.getTitle(), CoreMatchers.containsString(expectedTitlePart));
     }
 
+    @Then("^I? ?check (?:the)? ?page contains the text \"([^\"]*)\"$")
+    public void checkPageContainsText(String expectedText) {
+        List<WebElement> elementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + expectedText + "')]"));
+        assertTrue("Text " + expectedText + " not found", elementsFound.size() > 0);
+    }
+
+    @Then("^I? ?check (?:the)? ?page does not contain the text \"([^\"]*)\"$")
+    public void checkPageDoesNotContainsText(String unExpectedText) throws Exception {
+        List<WebElement> elementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + unExpectedText + "')]"));
+        assertTrue("Text " + unExpectedText + " not found", elementsFound.size() == 0);
+    }
+
+
     @Then("^I? ?check (?:the)? ?element's inner text is equal to \"([^\"]*)\"$")
     public void checkInnerText(String expectedText) {
         assertEquals(expectedText, selectedElement.getText());
@@ -574,6 +375,13 @@ public class Steps {
     @Then("^I? ?check (?:the)? ?element's inner text contains \"([^\"]*)\"$")
     public void checkInnerTextContains(String expectedSubText) {
         assertThat(selectedElement.getText(), CoreMatchers.containsString(expectedSubText));
+    }
+
+    @Then("^I? ?check if the element's descendents contain the text \"([^\"]*)\"$")
+    public void checkDescendents(String expectedText) {
+        assertTrue(selectedElement == null ?
+                driver.findElements(By.xpath("//*[contains(text(),'" + expectedText + "')]")).size() > 0 :
+                selectedElement.findElements(By.xpath(".//*[contains(text(),'" + expectedText + "')]")).size() > 0);
     }
 
     @Then("^I? ?check (?:the)? ?attribute \"([^\"]*)\" exists$")
@@ -596,8 +404,16 @@ public class Steps {
      * @param expectedCount expected number of elements in selectedElements
      */
     @Then("^I? ?check (?:the)? ?number of elements found is (\\d+)$")
-    public void checkPageTitleContains(int expectedCount) {
+    public void checkNumberOfElementsFound(int expectedCount) {
         assertEquals(expectedCount, selectedElements.size());
+    }
+
+    /**
+     * @param expectedCount expected number of elements in selectedElements
+     */
+    @Then("^I? ?check (?:the)? ?number of elements found is at least (\\d+)$")
+    public void checkNumberOfElementsFoundAtLeast(int expectedCount) {
+        assertTrue(selectedElements.size() >= expectedCount);
     }
 
     @Then("^I? ?check (?:the)? ?element is displayed$")
@@ -630,23 +446,6 @@ public class Steps {
     @Then("^I? ?clear (?:the)? ?named elements$")
     public void clearNamedElements() {
         namedElements = new HashMap<>();
-    }
-
-    /**
-     * Clears stored exceptions if these are no longer required for failure checks
-     */
-    @Then("^I? ?ignore (?:the)? ?previous failures$")
-    public void clearExceptions() {
-        exceptions = new ArrayList<>();
-    }
-
-    /**
-     * Does not look for specific exception. Checks if any exception have been caught after calling 'a failure is
-     * expected' step definition.
-     */
-    @Then("^I? ?check (?:to see)? ?if a? ?failure has occurred$")
-    public void checkForFailure() {
-        assertNotEquals(0, exceptions.size());
     }
 
     @Then("^I? ?(?:close|quit)(?:(?: the)? browser)?$")
@@ -708,11 +507,6 @@ public class Steps {
         back();
     }
 
-    @Then("^I? ?(?:clear|forget) (?:the)? ?(?:previous|last|existing) failures$")
-    public void clearExceptionsAlias() {
-        exceptions = new ArrayList<>();
-    }
-
     @When("^I? ?(?:press|select|click|click on|go) forward$")
     public void forwardAlias() {
         forward();
@@ -739,5 +533,10 @@ public class Steps {
         else {
             throw new SeleniumStepException("Browser " + browserName + " is not supported");
         }
+    }
+
+    @After
+    public void forceCloseBrowser() {
+        driver.close();
     }
 }
