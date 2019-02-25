@@ -146,3 +146,37 @@ Feature: Basic examples
     Then I check the attribute "src" exists
       And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
       And I close the browser
+
+  Scenario: Using explicit wait - visibility of an element
+    Given I open the browser
+      And go to url "https://www.google.com/"
+      And I am waiting for elements to be visible with a timeout of 10 seconds when selecting
+    When I select element by id using value "hplogo"
+    Then I check the attribute "src" exists
+      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I close the browser
+
+  Scenario: Using explicit wait - clickability of an element
+    Given I open the browser
+      And go to url "https://www.google.com/"
+      And I am waiting for elements to be clickable with a timeout of 10 seconds when selecting
+    When I select element by id using value "hplogo"
+    Then I check the attribute "src" exists
+      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I close the browser
+
+  Scenario: Using explicit wait - presence of an element
+    Given I open the browser
+      And go to url "https://www.google.com/"
+      And I am waiting for elements to be present with a timeout of 10 seconds when selecting
+    When I select element by id using value "hplogo"
+    Then I check the attribute "src" exists
+      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I close the browser
+
+  Scenario: Using explicit wait - visibility of multiple elements
+    Given I open the browser
+      And go to url "https://www.google.com/"
+      And I am waiting for elements to be present with a timeout of 10 seconds when selecting
+    When I select elements by tag using value "div"
+      And I close the browser

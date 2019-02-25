@@ -13,6 +13,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -41,6 +43,9 @@ public class Steps {
     private HashMap<String, WebElement> namedElements;
     private List<WebElement> selectedElements;
     private WebElement selectedElement;
+    private ExplicitWait explicitWait;
+    private ExplicitWait explicitWaitAll;
+    private int explicitWaitTimeout;
 
     public Steps() {
         this.namedElements = new HashMap<>();
@@ -87,6 +92,34 @@ public class Steps {
         driver.manage().window().maximize();
     }
 
+
+    @Given("^I? ?am waiting for elements to be clickable with a timeout of (\\d+) seconds(?: when selecting)?$")
+    public void setExplicitWaitToClickable(int timout) {
+        explicitWait = ExplicitWait.CLICKABLE;
+        explicitWaitTimeout = timout;
+    }
+
+    @Given("^I? ?am waiting for elements to be present with a timeout of (\\d+) seconds(?: when selecting)?$")
+    public void setExplicitWaitToPresent(int timout) {
+        explicitWait = ExplicitWait.PRESENT;
+        explicitWaitAll = ExplicitWait.ALL_PRESENT;
+        explicitWaitTimeout = timout;
+    }
+
+    @Given("^I? ?am waiting for elements to be visible with a timeout of (\\d+) seconds(?: when selecting)?$")
+    public void setExplicitWaitToVisibility(int timout) {
+        explicitWait = ExplicitWait.VISIBLE;
+        explicitWaitAll = ExplicitWait.ALL_VISIBLE;
+        explicitWaitTimeout = timout;
+    }
+
+    @Given("^no explicit wait$")
+    public void clearExplicitWait() {
+        explicitWait = null;
+        explicitWaitAll = null;
+        explicitWaitTimeout = 0;
+    }
+
     //-------------------------//
     //    Selector methods     //
     //-------------------------//
@@ -94,13 +127,17 @@ public class Steps {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by css selector using value \"([^\"]*)\"$")
-    public void selectElementByCss(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(selector)) :
-                    selectedElement.findElement(By.cssSelector(selector));
+    @When("^I? ?select element by css locator using value \"([^\"]*)\"$")
+    public void selectElementByCss(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.CSS, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(locator)) :
+                    selectedElement.findElement(By.cssSelector(locator));
     }
 
     /**
@@ -108,25 +145,33 @@ public class Steps {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select elements by css selector using value \"([^\"]*)\"$")
-    public void selectElementsByCss(String selector) throws NoSuchElementException {
-        selectedElements = selectedElement == null ? driver.findElements(By.cssSelector(selector)) :
-                selectedElement.findElements(By.cssSelector(selector));
+    @When("^I? ?select elements by css locator using value \"([^\"]*)\"$")
+    public void selectElementsByCss(String locator) throws NoSuchElementException {
+        if (explicitWaitAll != null) {
+            selectedElements = explicitWaitAll.applyWait(driver, Selector.CSS, locator, explicitWaitTimeout);
+            return;
+        }
+        selectedElements = selectedElement == null ? driver.findElements(By.cssSelector(locator)) :
+                selectedElement.findElements(By.cssSelector(locator));
     }
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select element by xpath using value \"([^\"]*)\"$")
-    public void selectElementByXpath(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.xpath(selector)) :
-                selectedElement.findElement(By.xpath(selector));
+    public void selectElementByXpath(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.XPATH, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.xpath(locator)) :
+                selectedElement.findElement(By.xpath(locator));
     }
 
     /**
@@ -134,37 +179,49 @@ public class Steps {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select elements by xpath using value \"([^\"]*)\"$")
-    public void selectElementsByXpath(String selector) throws NoSuchElementException {
-        selectedElements = selectedElement == null ? driver.findElements(By.xpath(selector)) :
-                selectedElement.findElements(By.xpath(selector));
+    public void selectElementsByXpath(String locator) throws NoSuchElementException {
+        if (explicitWaitAll != null) {
+            selectedElements = explicitWaitAll.applyWait(driver, Selector.XPATH, locator, explicitWaitTimeout);
+            return;
+        }
+        selectedElements = selectedElement == null ? driver.findElements(By.xpath(locator)) :
+                selectedElement.findElements(By.xpath(locator));
     }
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select element by id using value \"([^\"]*)\"$")
-    public void selectElementById(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.id(selector)) :
-                selectedElement.findElement(By.id(selector));
+    public void selectElementById(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.ID, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.id(locator)) :
+                selectedElement.findElement(By.id(locator));
     }
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select element by tag using value \"([^\"]*)\"$")
-    public void selectElementByTag(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.tagName(selector)) :
-                selectedElement.findElement(By.tagName(selector));
+    public void selectElementByTag(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.TAG, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.tagName(locator)) :
+                selectedElement.findElement(By.tagName(locator));
     }
 
     /**
@@ -172,26 +229,34 @@ public class Steps {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select elements by tag using value \"([^\"]*)\"$")
-    public void selectElementsByTag(String selector) throws NoSuchElementException {
-        selectedElements = selectedElement == null ? driver.findElements(By.tagName(selector)) :
-                selectedElement.findElements(By.tagName(selector));
+    public void selectElementsByTag(String locator) throws NoSuchElementException {
+        if (explicitWaitAll != null) {
+            selectedElements = explicitWaitAll.applyWait(driver, Selector.TAG, locator, explicitWaitTimeout);
+            return;
+        }
+        selectedElements = selectedElement == null ? driver.findElements(By.tagName(locator)) :
+                selectedElement.findElements(By.tagName(locator));
     }
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      * If multiple elements are found the first element will be assigned to selectedElement
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select element by class name using value \"([^\"]*)\"$")
-    public void selectElementByClassName(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.className(selector)) :
-                selectedElement.findElement(By.className(selector));
+    public void selectElementByClassName(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.CLASS, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.className(locator)) :
+                selectedElement.findElement(By.className(locator));
     }
 
     /**
@@ -199,37 +264,49 @@ public class Steps {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select elements by class name using value \"([^\"]*)\"$")
-    public void selectElementsByClassName(String selector) throws NoSuchElementException {
-        selectedElements = selectedElement == null ? driver.findElements(By.className(selector)) :
-                selectedElement.findElements(By.className(selector));
+    public void selectElementsByClassName(String locator) throws NoSuchElementException {
+        if (explicitWaitAll != null) {
+            selectedElements = explicitWaitAll.applyWait(driver, Selector.CLASS, locator, explicitWaitTimeout);
+            return;
+        }
+        selectedElements = selectedElement == null ? driver.findElements(By.className(locator)) :
+                selectedElement.findElements(By.className(locator));
     }
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select element by link text using value \"([^\"]*)\"$")
-    public void selectElementByLinkText(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.linkText(selector)) :
-                selectedElement.findElement(By.linkText(selector));
+    public void selectElementByLinkText(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.LINK, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.linkText(locator)) :
+                selectedElement.findElement(By.linkText(locator));
     }
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
-     * @param selector a string that targets an element in the dom.
+     * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
     @When("^I? ?select element by partial link text using value \"([^\"]*)\"$")
-    public void selectElementByPartialLinkText(String selector) throws NoSuchElementException {
-        selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(selector)) :
-                selectedElement.findElement(By.partialLinkText(selector));
+    public void selectElementByPartialLinkText(String locator) throws NoSuchElementException {
+        if (explicitWait != null) {
+            selectedElement = explicitWait.applyWait(driver, Selector.PARTIAL_LINK, locator, explicitWaitTimeout).get(0);
+            return;
+        }
+        selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(locator)) :
+                selectedElement.findElement(By.partialLinkText(locator));
     }
 
     /**
@@ -366,7 +443,6 @@ public class Steps {
         assertTrue("Text " + unExpectedText + " not found", elementsFound.size() == 0);
     }
 
-
     @Then("^I? ?check (?:the)? ?element's inner text is equal to \"([^\"]*)\"$")
     public void checkInnerText(String expectedText) {
         assertEquals(expectedText, selectedElement.getText());
@@ -431,6 +507,63 @@ public class Steps {
         assertTrue(selectedElement.isEnabled());
     }
 
+
+    // EXPLICIT WAIT VALIDATIONS
+
+    @Then("^I? ?check (?:the)? ?invisibility of (?:the)? ?selected element with a timeout of (\\d+) seconds$")
+    public void invisibilityOfElement(long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.invisibilityOf(selectedElement)));
+    }
+
+    @Then("^I? ?check (?:the)? ?invisibility of (?:the)? ?selected elements with a timeout of (\\d+) seconds$")
+    public void invisibilityOfAllElements(long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.invisibilityOfAllElements(selectedElements)));
+    }
+
+    @Then("^I? ?check (?:the)? ?selected element is in focus with a timeout of (\\d+) seconds$")
+    public void elementIsSelected(long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.elementSelectionStateToBe(selectedElement, true)));
+    }
+
+    @Then("^I? ?check (?:the)? ?selected element is not in focus with a timeout of (\\d+) seconds$")
+    public void elementIsNotSelected(long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.elementSelectionStateToBe(selectedElement, false)));
+    }
+
+    @Then("^I? ?check (?:the)? ?selected element is no longer attached to (?:the)? ?dom with a timeout of (\\d+) seconds$")
+    public void elementIsStale(long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.stalenessOf(selectedElement)));
+    }
+
+    @Then("^I? ?check (?:the)? ?text \"([^\"]*)\" is present in the selected element with a timeout of (\\d+) seconds$")
+    public void textIsPresent(String expectedText, long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.textToBePresentInElement(selectedElement, expectedText)));
+    }
+
+    @Then("^I? ?check (?:the)? ?text \"([^\"]*)\" is present in the selected element's value with a timeout of (\\d+) seconds$")
+    public void textIsPresentInValue(String expectedText, long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.textToBePresentInElementValue(selectedElement, expectedText)));
+    }
+
+    @Then("^I? ?check (?:the)? ?page title is \"([^\"]*)\" with a timeout of (\\d+) seconds$")
+    public void checkTitleWithWait(String expectedTitle, long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.textToBePresentInElement(selectedElement, expectedTitle)));
+    }
+
+    @Then("^I? ?check (?:the)? ?page title contains \"([^\"]*)\" with a timeout of (\\d+) seconds$")
+    public void checkTitleContainsWithWait(String expectedTitlePart, long timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        assertTrue(wait.until(ExpectedConditions.textToBePresentInElement(selectedElement, expectedTitlePart)));
+    }
+
     /**
      * Clears both selectedElements list and the single selectedElement
      */
@@ -480,6 +613,21 @@ public class Steps {
     @Given("^I? ?maximize (?:the)? ?window$")
     public void maximizeWindowAlias() {
         maximizeWindow();
+    }
+
+    @Given("I? ?set explicit wait to 0")
+    public void clearExplicitWaitAlias1() {
+        clearExplicitWait();
+    }
+
+    @Given("I? ?disable explicit wait")
+    public void clearExplicitWaitAlias2() {
+        clearExplicitWait();
+    }
+
+    @Given("Explicit wait is disabled")
+    public void clearExplicitWaitAlias3() {
+        clearExplicitWait();
     }
 
     @Given("^I? ?launch (?:the )? ?browser$")
