@@ -45,7 +45,7 @@ public class Steps {
     private WebElement selectedElement;
     private ExplicitWait explicitWait;
     private ExplicitWait explicitWaitAll;
-    private int explicitWaitTimeout;
+    private long explicitWaitTimeout;
 
     public Steps() {
         this.namedElements = new HashMap<>();
@@ -130,7 +130,7 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by css locator using value \"([^\"]*)\"$")
+    @When("^I? ?select element by css selector using value \"([^\"]*)\"$")
     public void selectElementByCss(String locator) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.CSS, locator, explicitWaitTimeout).get(0);
@@ -148,7 +148,7 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select elements by css locator using value \"([^\"]*)\"$")
+    @When("^I? ?select elements by css selector using value \"([^\"]*)\"$")
     public void selectElementsByCss(String locator) throws NoSuchElementException {
         if (explicitWaitAll != null) {
             selectedElements = explicitWaitAll.applyWait(driver, Selector.CSS, locator, explicitWaitTimeout);
@@ -405,12 +405,6 @@ public class Steps {
         namedElements.put(elementName, selectedElement);
     }
 
-    // Temporary method until explicit waits are implemented
-    @When("^a (\\d+) second pause$")
-    public void pause(int seconds) throws InterruptedException {
-        Thread.sleep(seconds * 1000);
-    }
-
     @Then("^I? ?check (?:the)? ?current url is \"([^\"]*)\"$")
     public void checkCurrentUrl(String expectedUrl) {
         assertEquals(expectedUrl, driver.getCurrentUrl());
@@ -438,9 +432,9 @@ public class Steps {
     }
 
     @Then("^I? ?check (?:the)? ?page does not contain the text \"([^\"]*)\"$")
-    public void checkPageDoesNotContainsText(String unExpectedText) throws Exception {
+    public void checkPageDoesNotContainsText(String unExpectedText) {
         List<WebElement> elementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + unExpectedText + "')]"));
-        assertTrue("Text " + unExpectedText + " not found", elementsFound.size() == 0);
+        assertEquals(0, elementsFound.size());
     }
 
     @Then("^I? ?check (?:the)? ?element's inner text is equal to \"([^\"]*)\"$")
