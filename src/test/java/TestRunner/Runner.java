@@ -5,6 +5,6 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features="features",glue={"StepDefinition"})
+@CucumberOptions(features="features",glue={"fixture.stepdefs"})
 public class Runner {
 }
