@@ -14,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -130,14 +131,17 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by css selector using value \"([^\"]*)\"$")
-    public void selectElementByCss(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by css selector using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByCss(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.CSS, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(locator)) :
                     selectedElement.findElement(By.cssSelector(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
     }
 
     /**
@@ -164,14 +168,17 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by xpath using value \"([^\"]*)\"$")
-    public void selectElementByXpath(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by xpath using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByXpath(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.XPATH, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.xpath(locator)) :
                 selectedElement.findElement(By.xpath(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
     }
 
     /**
@@ -198,14 +205,17 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by id using value \"([^\"]*)\"$")
-    public void selectElementById(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by id using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementById(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.ID, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.id(locator)) :
                 selectedElement.findElement(By.id(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
     }
 
     /**
@@ -214,14 +224,17 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by tag using value \"([^\"]*)\"$")
-    public void selectElementByTag(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by tag using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByTag(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.TAG, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.tagName(locator)) :
                 selectedElement.findElement(By.tagName(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
     }
 
     /**
@@ -249,14 +262,17 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by class name using value \"([^\"]*)\"$")
-    public void selectElementByClassName(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by class name using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByClassName(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.CLASS, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.className(locator)) :
                 selectedElement.findElement(By.className(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
     }
 
     /**
@@ -283,14 +299,17 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by link text using value \"([^\"]*)\"$")
-    public void selectElementByLinkText(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by link text using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByLinkText(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.LINK, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.linkText(locator)) :
                 selectedElement.findElement(By.linkText(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
     }
 
     /**
@@ -299,14 +318,38 @@ public class Steps {
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
-    @When("^I? ?select element by partial link text using value \"([^\"]*)\"$")
-    public void selectElementByPartialLinkText(String locator) throws NoSuchElementException {
+    @When("^I? ?select element by partial link text using value \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByPartialLinkText(String locator, String alias) throws NoSuchElementException {
         if (explicitWait != null) {
             selectedElement = explicitWait.applyWait(driver, Selector.PARTIAL_LINK, locator, explicitWaitTimeout).get(0);
             return;
         }
         selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(locator)) :
                 selectedElement.findElement(By.partialLinkText(locator));
+        if (alias != null) {
+            namedElements.put(alias, selectedElement);
+        }
+    }
+
+    @When("^I? ?select element from dropdown by (?:the)? ?label \"([^\"]*)\"$")
+    public void selectFromDropdownByLabel(String label) {
+        Select select = new Select(selectedElement);
+        select.deselectAll();
+        select.selectByVisibleText(label);
+    }
+
+    @When("^I? ?select element from dropdown by (?:the)? ?value \"([^\"]*)\"$")
+    public void selectFromDropdownByValue(String value) {
+        Select select = new Select(selectedElement);
+        select.deselectAll();
+        select.selectByValue(value);
+    }
+
+    @When("^I? ?select element from dropdown by (?:the)? ?value (\\d+)$")
+    public void selectFromDropdownByIndex(int index) {
+        Select select = new Select(selectedElement);
+        select.deselectAll();
+        select.selectByIndex(index);
     }
 
     /**
@@ -337,9 +380,21 @@ public class Steps {
         selectedElement = namedElements.get(elementName);
     }
 
+
+
     @When("^I? ?(?:left)? ?click (?:the)? ?selected element$")
     public void clickElement() {
         selectedElement.click();
+    }
+
+    /**
+     * Compound step def to first click on the selected element then clear afterwards.
+     * It does not clear 'selectedElements'
+     */
+    @When("^I? ?(?:left)? ?click and clear (?:the)? ?selected element$")
+    public void clickAndClearElement() {
+        selectedElement.click();
+        selectedElement = null;
     }
 
     @When("^I? ?double click selected element$")
@@ -468,6 +523,30 @@ public class Steps {
     @Then("^I? ?check (?:the)? ?element's attribute \"([^\"]*)\" contains \"([^\"]*)\"$")
     public void checkAttributeValueContains(String attribute, String value) {
         assertThat(selectedElement.getAttribute(attribute), CoreMatchers.containsString(value));
+    }
+
+    @Then("^I? ?check (?:the)? ?dropdown's label is \"([^\"]*)\"$")
+    public void checkDropdownsLabelIs(String expectedLabel) {
+        Select select = new Select(selectedElement);
+        assertEquals(expectedLabel, select.getFirstSelectedOption().getText());
+    }
+
+    @Then("^I? ?check (?:the)? ?dropdown's label contains \"([^\"]*)\"$")
+    public void checkDropdownsLabelContains(String expectedLabelPart) {
+        Select select = new Select(selectedElement);
+        assertThat(select.getFirstSelectedOption().getText(), CoreMatchers.containsString(expectedLabelPart));
+    }
+
+    @Then("^I? ?check (?:the)? ?dropdown's value is \"([^\"]*)\"$")
+    public void checkDropdownsValueIs(String expectedValue) {
+        Select select = new Select(selectedElement);
+        assertEquals(expectedValue, select.getFirstSelectedOption().getAttribute("value"));
+    }
+
+    @Then("^I? ?check (?:the)? ?dropdown's value contains \"([^\"]*)\"$")
+    public void checkDropdownsValueContains(String expectedValuePart) {
+        Select select = new Select(selectedElement);
+        assertThat(select.getFirstSelectedOption().getAttribute("value"), CoreMatchers.containsString(expectedValuePart));
     }
 
     /**
@@ -679,6 +758,6 @@ public class Steps {
 
     @After
     public void forceCloseBrowser() {
-        driver.close();
+//        driver.close();
     }
 }
