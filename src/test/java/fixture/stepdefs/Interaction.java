@@ -1,7 +1,9 @@
 package fixture.stepdefs;
 
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import fixture.SeleniumHandlers;
+import org.openqa.selenium.interactions.Actions;
 
 public class Interaction {
 
@@ -14,6 +16,11 @@ public class Interaction {
     public void clickElementAndClear() {
         SeleniumHandlers.clickElement();
         SeleniumHandlers.clearSelectedElements();
+    }
+
+    @Then("^I right click the selected element$")
+    public void rightClick(){
+        SeleniumHandlers.rightClickElement();
     }
 
     @When("^I? ?double click selected element$")
@@ -43,4 +50,6 @@ public class Interaction {
     public void refresh() {
         SeleniumHandlers.refresh();
     }
+
+
 }
