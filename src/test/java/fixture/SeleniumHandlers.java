@@ -385,6 +385,11 @@ public class SeleniumHandlers {
         selectedElement.click();
     }
 
+    public static void rightClickElement(){
+        Actions actions = new Actions(driver);
+        actions.contextClick(selectedElement).perform();
+    }
+
     public static void doubleClickElement() {
         Actions actions = new Actions(driver);
         actions.doubleClick(selectedElement).perform();
