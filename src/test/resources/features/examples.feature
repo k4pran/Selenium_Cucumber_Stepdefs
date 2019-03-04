@@ -82,14 +82,14 @@ Feature: Basic examples
     Given I open the browser
       And go to url "https://www.google.com/"
     When I select element by xpath using value "/html/body/div/div[7]/div[1]/div/div/div/div/div[2]/div/div/div[2]/div[1]"
-    Then I check the element's inner text is equal to "A privacy reminder from Google"
+    Then I check the selected element's inner text is equal to "A privacy reminder from Google"
       And close the browser
 
   Scenario: Check an element's inner text contains
     Given I open the browser
       And go to url "https://www.google.com/"
     When I select element by xpath using value "/html/body/div/div[7]/div[1]/div/div/div/div/div[2]/div/div/div[2]/div[1]"
-    Then I check the element's inner text contains "reminder"
+    Then I check the selected element's inner text contains "reminder"
       And close the browser
 
   Scenario: Entering text into an input field
@@ -144,7 +144,7 @@ Feature: Basic examples
       And go to url "https://www.google.com/"
     When I select element by id using value "hplogo"
     Then I check the attribute "src" exists
-      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I check the selected element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
       And I close the browser
 
   Scenario: Using explicit wait - visibility of an element
@@ -153,7 +153,7 @@ Feature: Basic examples
       And I am waiting for elements to be visible with a timeout of 10 seconds when selecting
     When I select element by id using value "hplogo"
     Then I check the attribute "src" exists
-      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I check the selected element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
       And I close the browser
 
   Scenario: Using explicit wait - clickability of an element
@@ -162,7 +162,7 @@ Feature: Basic examples
       And I am waiting for elements to be clickable with a timeout of 10 seconds when selecting
     When I select element by id using value "hplogo"
     Then I check the attribute "src" exists
-      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I check the selected element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
       And I close the browser
 
   Scenario: Using explicit wait - presence of an element
@@ -171,7 +171,7 @@ Feature: Basic examples
       And I am waiting for elements to be present with a timeout of 10 seconds when selecting
     When I select element by id using value "hplogo"
     Then I check the attribute "src" exists
-      And I check the element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+      And I check the selected element's attribute "src" contains "/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
       And I close the browser
 
   Scenario: Using explicit wait - visibility of multiple elements

@@ -2,13 +2,6 @@ package fixture.stepdefs;
 
 import cucumber.api.java.en.Then;
 import fixture.SeleniumHandlers;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class Validations {
 
@@ -32,37 +25,37 @@ public class Validations {
         SeleniumHandlers.checkPageTitleContains(expectedTitlePart);
     }
 
-    @Then("^I? ?check (?:the)? ?page contains the text \"([^\"]*)\"$")
-    public void checkPageContainsText(String expectedText) {
-        SeleniumHandlers.checkPageContainsText(expectedText);
+    @Then("^I? ?check (?:the)? ?page contains the text \"([^\"]*)\"(?: with a timeout of (\\d+) seconds)?$")
+    public void checkPageContainsText(String expectedText, Long timeout) {
+        SeleniumHandlers.checkPageContainsText(expectedText, timeout);
     }
 
-    @Then("^I? ?check (?:the)? ?page does not contain the text \"([^\"]*)\"$")
-    public void checkPageDoesNotContainsText(String unexpectedText) {
-        SeleniumHandlers.checkPageDoesNotContainsText(unexpectedText);
+    @Then("^I? ?check (?:the)? ?page does not contain the text \"([^\"]*)\"(?: with a timeout of (\\d+) seconds)?$")
+    public void checkPageDoesNotContainsText(String unexpectedText, Long timeout) {
+        SeleniumHandlers.checkPageDoesNotContainsText(unexpectedText, timeout);
     }
 
-    @Then("^I? ?check (?:that)? ?any element's inner text is equal to \"([^\"]*)\"$")
-    public void checkPageElementHasInnerText(String expectedText) {
-        SeleniumHandlers.checkPageElementHasInnerText(expectedText);
+    @Then("^I? ?check (?:that)? ?any element's inner text is equal to \"([^\"]*)\"(?: with a timeout of (\\d+) seconds)?$")
+    public void checkPageElementHasInnerText(String expectedText, Long timeout) {
+        SeleniumHandlers.checkPageElementHasInnerText(expectedText, timeout);
     }
 
-    @Then("^I? ?check (?:that)? ?no element's inner text is equal to \"([^\"]*)\"$")
-    public void checkNoPageElementHasInnerText(String unexpectedText) {
-        SeleniumHandlers.checkNoPageElementHasInnerText(unexpectedText);
+    @Then("^I? ?check (?:that)? ?no element's inner text is equal to \"([^\"]*)\"(?: with a timeout of (\\d+) seconds)?$")
+    public void checkNoPageElementHasInnerText(String unexpectedText, Long timeout) {
+        SeleniumHandlers.checkNoPageElementHasInnerText(unexpectedText, timeout);
     }
 
-    @Then("^I? ?check (?:the)? ?element's inner text is equal to \"([^\"]*)\"$")
+    @Then("^I? ?check (?:the)? ?selected element's inner text is equal to \"([^\"]*)\"$")
     public void checkInnerText(String expectedText) {
         SeleniumHandlers.checkInnerText(expectedText);
     }
 
-    @Then("^I? ?check (?:the)? ?element's inner text contains \"([^\"]*)\"$")
+    @Then("^I? ?check (?:the)? ?selected element's inner text contains \"([^\"]*)\"$")
     public void checkInnerTextContains(String expectedSubText) {
         SeleniumHandlers.checkInnerTextContains(expectedSubText);
     }
 
-    @Then("^I? ?check if the element's descendents contain the text \"([^\"]*)\"$")
+    @Then("^I? ?check if (?:the)? ?selected element's descendents contain the text \"([^\"]*)\"$")
     public void checkDescendents(String expectedText) {
         SeleniumHandlers.checkDescendents(expectedText);
     }
@@ -77,7 +70,7 @@ public class Validations {
         SeleniumHandlers.checkAttributeValue(attribute, value);
     }
 
-    @Then("^I? ?check (?:the)? ?element's attribute \"([^\"]*)\" contains \"([^\"]*)\"$")
+    @Then("^I? ?check (?:the)? ?selected element's attribute \"([^\"]*)\" contains \"([^\"]*)\"$")
     public void checkAttributeValueContains(String attribute, String value) {
         SeleniumHandlers.checkAttributeValueContains(attribute, value);
     }
@@ -98,17 +91,17 @@ public class Validations {
         SeleniumHandlers.checkNumberOfElementsFoundAtLeast(expectedCount);
     }
 
-    @Then("^I? ?check (?:the)? ?element is displayed$")
+    @Then("^I? ?check (?:the)? ?selected element is displayed$")
     public void checkElementIsDisplayed() {
         SeleniumHandlers.checkElementIsDisplayed();
     }
 
-    @Then("^I? ?check (?:the)? ?element is selected$")
+    @Then("^I? ?check (?:the)? ?selected element is selected$")
     public void checkElementIsSelected() {
         SeleniumHandlers.checkElementIsSelected();
     }
 
-    @Then("^I? ?check (?:the)? ?element is enabled$")
+    @Then("^I? ?check (?:the)? ?selected element is enabled$")
     public void checkElementIsEnabled() {
         SeleniumHandlers.checkElementIsEnabled();
     }

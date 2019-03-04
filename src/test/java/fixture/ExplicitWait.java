@@ -6,7 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,8 +23,28 @@ public enum ExplicitWait {
         @Override
         public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
             WebDriverWait wait = new WebDriverWait(driver, timeout);
-            return Collections.singletonList(
-                    wait.until(ExpectedConditions.elementToBeClickable(ExplicitWait.resolveSearchMethod(selectorMethod, locator))));
+
+            return new ArrayList<>(Arrays.asList(
+                    wait.until(ExpectedConditions.elementToBeClickable(resolveSearchMethod(selectorMethod, locator)))));
+        }
+
+        @Override
+        public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout,
+            WebElement element) {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            return new ArrayList<>(Arrays.asList(
+                    wait.until(ExpectedConditions.elementToBeClickable(element.findElement(resolveSearchMethod(selectorMethod, locator))))));
+        }
+
+        @Override
+        public List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
+            return applyWait(driver, selectorMethod, locator, timeout);
+        }
+
+        @Override
+        public List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout,
+                                          WebElement element) {
+            return applyWait(driver, selectorMethod, locator, timeout, element);
         }
     },
 
@@ -31,8 +52,33 @@ public enum ExplicitWait {
         @Override
         public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
             WebDriverWait wait = new WebDriverWait(driver, timeout);
-            return Collections.singletonList(wait.until(
-                    ExpectedConditions.presenceOfElementLocated(ExplicitWait.resolveSearchMethod(selectorMethod, locator))));
+            return new ArrayList<>(Arrays.asList(
+                    wait.until(ExpectedConditions.presenceOfElementLocated(resolveSearchMethod(selectorMethod, locator)))));
+        }
+
+        @Override
+        public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout,
+                                          WebElement element) {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            return new ArrayList<>(Arrays.asList(
+                    wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(element, resolveSearchMethod(selectorMethod, locator)))));
+        }
+
+        @Override
+        public List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            return wait.until(
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(resolveSearchMethod(selectorMethod, locator)));
+        }
+
+        @Override
+        public List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout,
+                                          WebElement element) {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+
+            // todo find a way to get a 'By' object from a webelement to get nested elements
+            return wait.until(
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(resolveSearchMethod(selectorMethod, locator)));
         }
     },
 
@@ -40,30 +86,42 @@ public enum ExplicitWait {
         @Override
         public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
             WebDriverWait wait = new WebDriverWait(driver, timeout);
-            return Collections.singletonList(wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(ExplicitWait.resolveSearchMethod(selectorMethod, locator))));
+            return new ArrayList<>(Arrays.asList(
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(ExplicitWait.resolveSearchMethod(selectorMethod, locator)))));
         }
-    },
 
-    ALL_PRESENT {
         @Override
-        public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
+        public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout,
+                                          WebElement element) {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            return new ArrayList<>(Arrays.asList(
+                    wait.until(ExpectedConditions.visibilityOf(element.findElement(resolveSearchMethod(selectorMethod, locator))))));
+        }
+
+        @Override
+        public List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
             WebDriverWait wait = new WebDriverWait(driver, timeout);
             return wait.until(
-                    ExpectedConditions.presenceOfAllElementsLocatedBy(ExplicitWait.resolveSearchMethod(selectorMethod, locator)));
+                    ExpectedConditions.visibilityOfAllElementsLocatedBy(resolveSearchMethod(selectorMethod, locator)));
         }
-    },
 
-    ALL_VISIBLE {
         @Override
-        public List<WebElement> applyWait(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout) {
+        public List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod selectorMethod, String locator, long timeout,
+                                          WebElement element) {
             WebDriverWait wait = new WebDriverWait(driver, timeout);
+
             return wait.until(
-                    ExpectedConditions.visibilityOfAllElementsLocatedBy(ExplicitWait.resolveSearchMethod(selectorMethod, locator)));
+                    ExpectedConditions.visibilityOfNestedElementsLocatedBy(element, resolveSearchMethod(selectorMethod, locator)));
         }
     };
 
     public abstract List<WebElement> applyWait(WebDriver driver, SelectorMethod searchMethod, String locator, long timeout);
+    public abstract List<WebElement> applyWait(WebDriver driver, SelectorMethod searchMethod, String locator, long timeout,
+                                               WebElement element);
+
+    public abstract List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod searchMethod, String locator, long timeout);
+    public abstract List<WebElement> applyWaitAll(WebDriver driver, SelectorMethod searchMethod, String locator, long timeout,
+                                               WebElement element);
 
     private static By resolveSearchMethod(SelectorMethod selectorMethod, String locator) {
 
@@ -78,7 +136,7 @@ public enum ExplicitWait {
                 return By.id(locator);
 
             case CLASS:
-                return By.tagName(locator);
+                return By.className(locator);
 
             case TAG:
                 return By.tagName(locator);

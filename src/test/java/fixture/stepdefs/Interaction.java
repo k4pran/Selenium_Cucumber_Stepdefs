@@ -5,12 +5,12 @@ import fixture.SeleniumHandlers;
 
 public class Interaction {
 
-    @When("^I? ?(?:left)? ?click (?:the)? ?selected element$")
+    @When("^I? ?(?:left)? ?click (?:on)? ?(?:the)? ?selected element$")
     public void clickElement() {
         SeleniumHandlers.clickElement();
     }
 
-    @When("^I? ?(?:left)? ?click and clear (?:the)? ?selected element$")
+    @When("^I? ?(?:left)? ?click (?:on)? ?and clear (?:the)? ?selected element$")
     public void clickElementAndClear() {
         SeleniumHandlers.clickElement();
         SeleniumHandlers.clearSelectedElements();
