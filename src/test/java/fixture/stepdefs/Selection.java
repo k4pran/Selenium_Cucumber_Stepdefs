@@ -186,6 +186,14 @@ public class Selection {
     }
 
     /**
+     * Clears only the single selectedElement
+     */
+    @Then("^I? ?clear (?:the)? ?selected element$")
+    public void clearSelectedElement() {
+        SeleniumHandlers.clearSelectedElement();
+    }
+
+    /**
      * Clears both selectedElements list and the single selectedElement
      */
     @Then("^I? ?clear (?:the)? ?selected elements$")
