@@ -51,12 +51,6 @@ public class FlowControl {
         SeleniumHandlers.pauseSecs(seconds);
     }
 
-    // Temporary method until explicit waits are implemented
-    @When("^a (\\d+) second pause$")
-    public void pause(int seconds) throws InterruptedException {
-        SeleniumHandlers.pause(seconds);
-    }
-
     // ALIASES
 
     @Given("^I? ?set implicit wait to (\\d+) nanoseconds$")

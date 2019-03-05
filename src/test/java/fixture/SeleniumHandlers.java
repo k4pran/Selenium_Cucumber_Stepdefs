@@ -1,10 +1,9 @@
 package fixture;
 
+import browser.BrowserBase;
+import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -20,6 +19,7 @@ import static org.junit.Assert.*;
 
 public class SeleniumHandlers {
 
+    private final static org.apache.log4j.Logger logger = Logger.getLogger(SeleniumHandlers.class);
 
     private static WebDriver driver;
 
@@ -35,25 +35,28 @@ public class SeleniumHandlers {
         SeleniumHandlers.selectedElements = new ArrayList<>();
     }
 
-    public static void openGivenWebBrowser(String browserName) throws Throwable {
-        launchBrowser(browserName);
+    public static void openBrowser(String browserName) throws Throwable {
+        BrowserBase.selectBrowser(browserName);
+        openBrowser();
     }
 
     public static void openBrowser() {
-        System.setProperty("webdriver.gecko.driver", "src/test/resources/drivers/geckodriver.exe");
-        driver = new FirefoxDriver();
+        driver = BrowserBase.getCurrentBrowser().getDriver();
     }
 
     public static void setImplicitWaitNano(long nanos) {
         driver.manage().timeouts().implicitlyWait(nanos, TimeUnit.NANOSECONDS);
+        logger.info("Implicit wait set to " + nanos + " nanoseconds");
     }
 
     public static void setImplicitWaitMs(long ms) {
         driver.manage().timeouts().implicitlyWait(ms, TimeUnit.MILLISECONDS);
+        logger.info("Implicit wait set to " + ms + " milliseconds");
     }
 
     public static void setImplicitWaitSeconds(long seconds) {
         driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
+        logger.info("Implicit wait set to " + seconds + " seconds");
     }
 
     public static void setExplicitWaitToClickable(int timout) {
@@ -66,7 +69,7 @@ public class SeleniumHandlers {
         explicitWaitTimeout = timout;
     }
 
-    public static void setExplicitWaitToVisibility(int timout) { // todo split ALL and singular up
+    public static void setExplicitWaitToVisibility(int timout) {
         explicitWait = ExplicitWait.VISIBLE;
         explicitWaitTimeout = timout;
     }
@@ -87,7 +90,6 @@ public class SeleniumHandlers {
     public static void maximizeWindow() {
         driver.manage().window().maximize();
     }
-
 
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
@@ -356,14 +358,13 @@ public class SeleniumHandlers {
     public static void filterSelectedElementsByText(String filterText) {
         if (explicitWait != null) {
 
-            int i = selectedElements.size(); // todo - better solution
+            int i = selectedElements.size();
             while (i != 0) {
                 i--;
                 try {
                     List<WebElement> ignore = selectedElement == null ?
                             explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout) :
                             explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout, selectedElement);
-
                 }
                 catch (TimeoutException e) {
                     selectedElements.remove(i);
@@ -442,11 +443,6 @@ public class SeleniumHandlers {
         namedElements.put(elementName, selectedElement);
     }
 
-    // Temporary method until explicit waits are implemented
-    public static void pause(int seconds) throws InterruptedException {
-        Thread.sleep(seconds * 1000);
-    }
-
     public static void checkCurrentUrl(String expectedUrl) {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
@@ -466,12 +462,13 @@ public class SeleniumHandlers {
     public static void checkPageContainsText(String expectedText, Long timeout) {
         if (timeout != null) {
             ExplicitWait.PRESENT.applyWait(driver, SelectorMethod.XPATH, "//*[contains(text(),'" + expectedText + "')]", timeout);
+            return;
         }
         List<WebElement> elementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + expectedText + "')]"));
         assertTrue("Text " + expectedText + " not found", elementsFound.size() > 0);
     }
 
-    public static void checkPageDoesNotContainsText(String unexpectedText, Long timeout) {
+    public static void checkPageDoesNotContainText(String unexpectedText, Long timeout) {
         if (timeout != null) {
             try {
                 ExplicitWait.PRESENT.applyWait(driver, SelectorMethod.XPATH, "//*[contains(text(),'" + unexpectedText + "')]", timeout);
@@ -480,6 +477,7 @@ public class SeleniumHandlers {
             catch (TimeoutException e) {
                 assert(true);
             }
+            return;
         }
         List<WebElement> elementsFound = driver.findElements(By.xpath("//*[contains(text(),'" + unexpectedText + "')]"));
         assertEquals(0, elementsFound.size());
@@ -488,6 +486,7 @@ public class SeleniumHandlers {
     public static void checkPageElementHasInnerText(String expectedText, Long timeout) {
         if (timeout != null) {
             ExplicitWait.PRESENT.applyWait(driver, SelectorMethod.XPATH, "//*[text()='" + expectedText + "']", timeout);
+            return;
         }
         List<WebElement> elementsFound = driver.findElements(By.xpath("//*[text()='" + expectedText + "']"));
         assertTrue("Text " + expectedText + " not found", elementsFound.size() > 0);
@@ -502,6 +501,7 @@ public class SeleniumHandlers {
             catch (TimeoutException e) {
                 assert(true);
             }
+            return;
         }
         List<WebElement> elementsFound = driver.findElements(By.xpath("//*[text()='" + unexpectedText + "']"));
         assertEquals(0, elementsFound.size());
@@ -627,31 +627,10 @@ public class SeleniumHandlers {
         namedElements = new HashMap<>();
     }
 
-    /**
-     * Initiates the specified browser driver
-     * @param browserName name of the browser
-     * @throws SeleniumException if browser is not supported
-     */
-    private static void launchBrowser(String browserName) throws SeleniumException {
-        if(browserName.equalsIgnoreCase("Firefox")) {
-            System.setProperty("webdriver.gecko.driver", "src/test/resources/drivers/geckodriver.exe");
-            driver = new FirefoxDriver();
-        }
-        else if(browserName.equalsIgnoreCase("Chrome")) {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("disable-infobars");
-            System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
-            driver = new ChromeDriver(options);
-        }
-        else {
-            throw new SeleniumException("Browser " + browserName + " is not supported");
-        }
-    }
-
     public static void closeBrowser() {
         if (driver != null) {
-            driver.close();
-            driver = null;
+            logger.info("Performing closing down operations...");
+            BrowserBase.getCurrentBrowser().close();
         }
     }
 }

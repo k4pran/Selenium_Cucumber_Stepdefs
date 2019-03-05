@@ -1,8 +1,6 @@
 package fixture.stepdefs;
 
-import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import fixture.SeleniumHandlers;
 
 public class Initialization {
@@ -14,7 +12,7 @@ public class Initialization {
 
     @Given("(?:the)? ?\"([^\"]*)\" browser is open")
     public void openGivenWebBrowser(String browserName) throws Throwable {
-        SeleniumHandlers.openGivenWebBrowser(browserName);
+        SeleniumHandlers.openBrowser(browserName);
     }
 
     /**
@@ -31,17 +29,11 @@ public class Initialization {
         SeleniumHandlers.maximizeWindow();
     }
 
-    @After
-    @Then("^I? ?(?:close|quit)(?:(?: the)? browser)?$")
-    public void closeBrowser() {
-        SeleniumHandlers.closeBrowser();
-    }
-
     // ALIASES
 
-    @Given("^I (?:choose|select|am using) ?(?:the)? driver \"([^\"]*)\"$")
-    public void selectDriver(String driver) throws Throwable {
-        openGivenWebBrowser(driver);
+    @Given("^I (?:choose|select|am using) ?(?:the)? browser \"([^\"]*)\"$")
+    public void selectDriver(String browserName) throws Throwable {
+        openGivenWebBrowser(browserName);
     }
 
     @Given("^I? ?maximize (?:the)? ?window$")

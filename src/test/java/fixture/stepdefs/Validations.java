@@ -32,7 +32,7 @@ public class Validations {
 
     @Then("^I? ?check (?:the)? ?page does not contain the text \"([^\"]*)\"(?: with a timeout of (\\d+) seconds)?$")
     public void checkPageDoesNotContainsText(String unexpectedText, Long timeout) {
-        SeleniumHandlers.checkPageDoesNotContainsText(unexpectedText, timeout);
+        SeleniumHandlers.checkPageDoesNotContainText(unexpectedText, timeout);
     }
 
     @Then("^I? ?check (?:that)? ?any element's inner text is equal to \"([^\"]*)\"(?: with a timeout of (\\d+) seconds)?$")

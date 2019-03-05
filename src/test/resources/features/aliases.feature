@@ -23,12 +23,6 @@ Feature: Aliases to allow multiple ways of expressing the same thing
     Given the browser is opened
       And quit the browser
 
-  Scenario: Selecting a browser alias
-    Given I select driver "driver"
-    Given I choose the driver "driver"
-    Given I am using the driver "driver"
-    Given I am using driver "driver"
-
     Given I refresh the page
       And I refresh page
       And select refresh
