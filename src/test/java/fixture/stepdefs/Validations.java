@@ -150,4 +150,16 @@ public class Validations {
     public void checkTitleContainsWithWait(String expectedTitlePart, long timeout) {
         SeleniumHandlers.checkTitleContainsWithWait(expectedTitlePart, timeout);
     }
+
+    @Then("^I? ?check the element \"([^\"]*)\"(?:'s)? inner text is equal to the element \"([^\"]*)\"(?:'s)? inner text$")
+    public void checkTwoElementsTextIsEqual(String firstElementText, String secondElementText) {
+        SeleniumHandlers.checkTwoElementsTextIsEqual(firstElementText, secondElementText);
+    }
+
+    @Then("^I? ?check the element \"([^\"]*)\"'s attribute \"([^\"]*)\"'s value is equal to " +
+            "the element \"([^\"]*)\"'s attribute \"([^\"]*)\"'s value$")
+    public void checkTwoElementsAttrValIsEqual(String firstElement, String firstAttr, String secondElement,
+                                            String secondAttr) {
+        SeleniumHandlers.checkTwoElementsAttrValIsEqual(firstElement, firstAttr, secondElement, secondAttr);
+    }
 }

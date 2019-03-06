@@ -3,6 +3,7 @@ package fixture;
 import browser.BrowserBase;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -605,6 +606,16 @@ public class SeleniumHandlers {
         assertTrue(wait.until(ExpectedConditions.textToBePresentInElement(selectedElement, expectedTitlePart)));
     }
 
+    public static void checkTwoElementsTextIsEqual(String firstElementText, String secondElementText) {
+        Assert.assertEquals(namedElements.get(firstElementText).getText(), namedElements.get(secondElementText).getText());
+    }
+
+    public static void checkTwoElementsAttrValIsEqual(String firstElement, String firstAttr, String secondElement,
+                                            String secondAttr) {
+        Assert.assertEquals(namedElements.get(firstElement).getAttribute(firstAttr),
+                namedElements.get(secondElement).getAttribute(secondAttr));
+    }
+
     /**
      * Clears only the single selectedElement
      */
@@ -618,7 +629,7 @@ public class SeleniumHandlers {
     public static void clearSelectedElements() {
         selectedElement = null;
         selectedElements = new ArrayList<>();
-    }
+}
 
     /**
      * Clears only named elements
