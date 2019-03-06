@@ -82,6 +82,7 @@ public class SeleniumHandlers {
 
     /**
      * Opens a url
+     *
      * @param url should be a fully qualified url such as https://www.google.com rather than google.com
      */
     public static void goToUrl(String url) {
@@ -95,6 +96,7 @@ public class SeleniumHandlers {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -117,6 +119,7 @@ public class SeleniumHandlers {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -134,6 +137,7 @@ public class SeleniumHandlers {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -156,6 +160,7 @@ public class SeleniumHandlers {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -173,6 +178,7 @@ public class SeleniumHandlers {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -193,6 +199,7 @@ public class SeleniumHandlers {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -215,6 +222,7 @@ public class SeleniumHandlers {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -233,6 +241,7 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      * If multiple elements are found the first element will be assigned to selectedElement
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -255,6 +264,7 @@ public class SeleniumHandlers {
      * by calling selectFromElements(int index) step definition.
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -272,6 +282,7 @@ public class SeleniumHandlers {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -292,6 +303,7 @@ public class SeleniumHandlers {
     /**
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -329,6 +341,7 @@ public class SeleniumHandlers {
 
     /**
      * Selects WebElement from selectedElements and assigned to selectedElement
+     *
      * @param index to select from selectedElements
      */
     public static void selectFromElements(Integer index) {
@@ -347,8 +360,7 @@ public class SeleniumHandlers {
                             explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filter + "')]", explicitWaitTimeout) :
                             explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filter + "')]", explicitWaitTimeout, selectedElement);
 
-                }
-                catch (TimeoutException e) {
+                } catch (TimeoutException e) {
                     selectedElements.remove(i);
                 }
             }
@@ -366,8 +378,7 @@ public class SeleniumHandlers {
                     List<WebElement> ignore = selectedElement == null ?
                             explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout) :
                             explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout, selectedElement);
-                }
-                catch (TimeoutException e) {
+                } catch (TimeoutException e) {
                     selectedElements.remove(i);
                 }
             }
@@ -377,6 +388,7 @@ public class SeleniumHandlers {
 
     /**
      * If the named element exists it will become the selectedElement so that actions can be performed on it
+     *
      * @param elementName alias to be selected
      */
     public static void selectNamedElement(String elementName) {
@@ -387,7 +399,7 @@ public class SeleniumHandlers {
         selectedElement.click();
     }
 
-    public static void rightClickElement(){
+    public static void rightClickElement() {
         Actions actions = new Actions(driver);
         actions.contextClick(selectedElement).perform();
     }
@@ -417,6 +429,225 @@ public class SeleniumHandlers {
     public static void enterText(String text) {
         selectedElement.sendKeys(text);
     }
+
+    public static void pressEnterKey() {
+        selectedElement.sendKeys(Keys.ENTER);
+    }
+
+    public static void pressEnter() {
+        selectedElement.sendKeys(Keys.ENTER);
+    }
+
+    public static void pressEnterKeyOnDropDown() {
+        Actions actions = new Actions(driver);
+        actions.sendKeys(Keys.ENTER);
+        actions.perform();
+    }
+
+    public static void pressArrowDownKey() {
+        selectedElement.sendKeys(Keys.ARROW_DOWN);
+    }
+
+    public static void pressArrowDownKeyTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.ARROW_DOWN);
+        }
+        actions.perform();
+    }
+
+    public static void pressArrowUpKey() {
+        selectedElement.sendKeys(Keys.ARROW_UP);
+    }
+
+    public static void pressArrowKeyUpTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.ARROW_UP);
+        }
+        actions.perform();
+    }
+
+    public static void pressArrowLeftKey() {
+        selectedElement.sendKeys(Keys.ARROW_LEFT);
+    }
+
+    public static void pressArrowLeftKeyTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.ARROW_LEFT);
+        }
+        actions.perform();
+    }
+
+    public static void pressArrowRightKey() {
+        selectedElement.sendKeys(Keys.ARROW_RIGHT);
+    }
+
+    public static void pressArrowRightKeyTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.ARROW_RIGHT);
+        }
+        actions.perform();
+    }
+
+    public static void pressArrowDownKeyAndEnter() {
+        selectedElement.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+    }
+
+    public static void pressArrowUpKeyAndEnter() {
+        selectedElement.sendKeys(Keys.ARROW_UP, Keys.ENTER);
+    }
+
+    public static void pressArrowLeftKeyAndEnter() {
+        selectedElement.sendKeys(Keys.ARROW_LEFT, Keys.ENTER);
+    }
+
+    public static void pressArrowRightKeyAndEnter() {
+        selectedElement.sendKeys(Keys.ARROW_RIGHT, Keys.ENTER);
+    }
+
+    /**
+     * OtherKeys
+     */
+
+    public static void pressBackspace() {
+        selectedElement.sendKeys(Keys.BACK_SPACE);
+    }
+
+    public static void pressBackspaceTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.BACK_SPACE);
+        }
+        actions.perform();
+    }
+
+    public static void pressDelete() {
+        selectedElement.sendKeys(Keys.DELETE);
+    }
+
+    public static void pressCtrlKey(){
+        selectedElement.sendKeys(Keys.CONTROL);
+    }
+
+    public static void pressAltKey(){
+        selectedElement.sendKeys(Keys.ALT);
+    }
+
+    public static void pressShiftKey(){
+        selectedElement.sendKeys(Keys.SHIFT);
+    }
+
+    public static void pressSpacebarKey(){
+        selectedElement.sendKeys(Keys.SPACE);
+    }
+
+    public static void pressSpacebarTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.SPACE);
+        }
+        actions.perform();
+    }
+
+    public static void pressTabKey(){
+        selectedElement.sendKeys(Keys.TAB);
+    }
+
+    public static void pressTabKeyTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.TAB);
+        }
+        actions.perform();
+    }
+
+    public static void pressEqualsKey(){
+        selectedElement.sendKeys(Keys.EQUALS);
+    }
+
+    public static void pressHomeKey(){
+        selectedElement.sendKeys(Keys.HOME);
+    }
+
+    public static void pressInsertKey(){
+        selectedElement.sendKeys(Keys.INSERT);
+    }
+
+    public static void pressPageUpKey(){
+        selectedElement.sendKeys(Keys.PAGE_UP);
+    }
+
+    public static void pressPageUpTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.PAGE_UP);
+        }
+        actions.perform();
+    }
+
+    public static void pressPageDownKey(){
+        selectedElement.sendKeys(Keys.PAGE_DOWN);
+    }
+
+    public static void pressPageDownTimes(int times) {
+        Actions actions = new Actions(driver);
+        for (int i = 0; i < times; i++) {
+            actions.sendKeys(Keys.PAGE_DOWN);
+        }
+        actions.perform();
+    }
+
+    public static void pressF1Key(){
+        selectedElement.sendKeys(Keys.F1);
+    }
+
+    public static void pressF2Key(){
+        selectedElement.sendKeys(Keys.F2);
+    }
+
+    public static void pressF3Key(){
+        selectedElement.sendKeys(Keys.F3);
+    }
+
+    public static void pressF4Key(){
+        selectedElement.sendKeys(Keys.F4);
+    }
+
+    public static void pressF5Key(){
+        selectedElement.sendKeys(Keys.F5);
+    }
+    public static void pressF6Key(){
+        selectedElement.sendKeys(Keys.F6);
+    }
+
+    public static void pressF7Key(){
+        selectedElement.sendKeys(Keys.F7);
+    }
+
+    public static void pressF8Key(){
+        selectedElement.sendKeys(Keys.F8);
+    }
+
+    public static void pressF9Key(){
+        selectedElement.sendKeys(Keys.F9);
+    }
+
+    public static void pressF10Key(){
+        selectedElement.sendKeys(Keys.F10);
+    }
+
+    public static void pressF11Key(){
+        selectedElement.sendKeys(Keys.F11);
+    }
+
+    public static void pressF12Key(){
+        selectedElement.sendKeys(Keys.F12);
+    }
+
+    /**End of sendKeys*/
 
     public static void refresh() {
         driver.navigate().refresh();
@@ -474,9 +705,8 @@ public class SeleniumHandlers {
             try {
                 ExplicitWait.PRESENT.applyWait(driver, SelectorMethod.XPATH, "//*[contains(text(),'" + unexpectedText + "')]", timeout);
                 throw new UnexpectedElementFoundException("Unexpected element with text " + unexpectedText + " was found on page");
-            }
-            catch (TimeoutException e) {
-                assert(true);
+            } catch (TimeoutException e) {
+                assert (true);
             }
             return;
         }
@@ -498,9 +728,8 @@ public class SeleniumHandlers {
             try {
                 ExplicitWait.PRESENT.applyWait(driver, SelectorMethod.XPATH, "//*[text()='" + unexpectedText + "']", timeout);
                 throw new UnexpectedElementFoundException("Unexpected element with text " + unexpectedText + " was found on page");
-            }
-            catch (TimeoutException e) {
-                assert(true);
+            } catch (TimeoutException e) {
+                assert (true);
             }
             return;
         }
@@ -518,8 +747,8 @@ public class SeleniumHandlers {
 
     public static void checkDescendents(String expectedText) {
         assertTrue(selectedElement == null ?
-            driver.findElements(By.xpath("//*[contains(text(),'" + expectedText + "')]")).size() > 0 :
-            selectedElement.findElements(By.xpath(".//*[contains(text(),'" + expectedText + "')]")).size() > 0);
+                driver.findElements(By.xpath("//*[contains(text(),'" + expectedText + "')]")).size() > 0 :
+                selectedElement.findElements(By.xpath(".//*[contains(text(),'" + expectedText + "')]")).size() > 0);
     }
 
     public static void iCheckAttributeExists(String attribute) {
@@ -611,7 +840,7 @@ public class SeleniumHandlers {
     }
 
     public static void checkTwoElementsAttrValIsEqual(String firstElement, String firstAttr, String secondElement,
-                                            String secondAttr) {
+                                                      String secondAttr) {
         Assert.assertEquals(namedElements.get(firstElement).getAttribute(firstAttr),
                 namedElements.get(secondElement).getAttribute(secondAttr));
     }
@@ -629,7 +858,7 @@ public class SeleniumHandlers {
     public static void clearSelectedElements() {
         selectedElement = null;
         selectedElements = new ArrayList<>();
-}
+    }
 
     /**
      * Clears only named elements
