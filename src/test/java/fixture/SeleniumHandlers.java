@@ -1,5 +1,6 @@
 package fixture;
 
+import browser.Browser;
 import browser.BrowserBase;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
@@ -42,6 +43,7 @@ public class SeleniumHandlers {
     }
 
     public static void openBrowser() {
+        BrowserBase.getCurrentBrowser().setupDriver();
         driver = BrowserBase.getCurrentBrowser().getDriver();
     }
 
@@ -639,7 +641,7 @@ public class SeleniumHandlers {
     }
 
     public static void closeBrowser() {
-        if (driver != null) {
+        if (BrowserBase.getCurrentBrowser().getDriver() != null) {
             logger.info("Performing closing down operations...");
             BrowserBase.getCurrentBrowser().close();
         }
