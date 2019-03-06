@@ -81,9 +81,6 @@ public class Firefox extends Browser {
 
     @Override
     public WebDriver getDriver() {
-        if (driver == null) {
-            setupDriver();
-        }
         return driver;
     }
 

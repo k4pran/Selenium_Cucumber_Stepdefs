@@ -88,9 +88,6 @@ public class Chrome extends Browser {
 
     @Override
     public WebDriver getDriver() {
-        if (driver == null) {
-            setupDriver();
-        }
         return driver;
     }
 

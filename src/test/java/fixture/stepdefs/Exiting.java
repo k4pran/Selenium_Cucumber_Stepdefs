@@ -7,7 +7,6 @@ import fixture.SeleniumHandlers;
 
 public class Exiting {
 
-    @After(order = 1)
     @Then("^I? ?take a? ?screenshot$")
     public void takeScreenshot() {
         BrowserBase.getCurrentBrowser().takeScreenshot();

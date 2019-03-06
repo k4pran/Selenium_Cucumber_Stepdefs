@@ -1,6 +1,5 @@
 package fixture;
 
-import browser.Browser;
 import browser.BrowserBase;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
