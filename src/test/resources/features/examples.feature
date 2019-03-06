@@ -2,10 +2,9 @@ Feature: Basic examples
 
   Scenario: Open the browser
     Given I open the browser
-    Then I close the browser
 
   Scenario: Open the browser
-    Given "chrome" browser is open
+    Given "default" browser is open
     Then I close the browser
 
   Scenario: Open browser and go to url
