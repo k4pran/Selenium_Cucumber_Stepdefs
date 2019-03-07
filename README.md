@@ -10,12 +10,12 @@
 - [Browser Configuration](#Configuration)
 - [Misc](#Misc)
 
-##Introduction
+## Introduction
 
 The goal of this project is to make writing automated tests as seamlessly and user-friendly as possible -
 With a catalogue of Java code, for testing with Cucumber and Selenium.
 
-##Overview
+## Overview
 
 This project uses a number of Cucumber step definitions to leverage Selenium
 to make automated testing easier.
@@ -27,7 +27,7 @@ Selection
 Etc...
 A config file also allows the user to set-up the Selenium driver, with custom options before running tests.
 
-##Selection
+## Selection
 
 The 'selectedElement' variable is the foundation of this framework - Any actions that
 are performed, are performed on the selected element - There are various ways to
@@ -75,7 +75,7 @@ They can also be created after the selection process.
       And I select the named element "my container"
 ```
 
-##Navigation
+## Navigation
 
 There are step definitions to cover navigation. The most common being visiting a url.
 
@@ -87,7 +87,7 @@ There are step definitions to cover navigation. The most common being visiting a
 There are also navigation step definitions to go back a page, forward a page and to
 refresh the page.
 
-##Interaction
+## Interaction
 
 All interactions will be performed on the 'selectedElement', so it is important to select
 the element first using a search method, and then interacting with the element. You can
@@ -119,7 +119,7 @@ Hovering over
       And I move to the selected element
 ```
 
-##Validations
+## Validations
 
 There are a number of ways to perform validations as part of your test - You can
 check if an element contains specific text.
@@ -165,7 +165,7 @@ Perform checks on the full web-page
     Then I check the page contains the text "Skills"
 ```
 
-##Waits
+## Waits
 
 Implicit wait can be used simply by setting implicit wait, this will
 be used for any step definitions.
@@ -207,7 +207,7 @@ return a boolean rather than 'WebElements' have their own step definitions that 
       And I check the page does not contain the text "nosuchword" with a timeout of 2 seconds
 ```
 
-##Configuration
+## Configuration
 
 Some of the driver settings can be set using step definitions, however others
 can be set using the config file browsers.xml. Unless a browser is specified when launching the browser,
@@ -233,7 +233,7 @@ The name "default" references the browser config you would like to use. Other cu
 options that can be set are startup arguments, auto-close after scenarios, browser extensions
 and more.
 
-##Misc
+## Misc
 
 Example '.feature' files can be found within resources/features.
 
