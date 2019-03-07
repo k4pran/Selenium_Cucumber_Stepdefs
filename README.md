@@ -6,8 +6,8 @@
 - [Navigation](Navigation)
 - [Interaction](#Interaction)
 - [Validations](#Validations)
-- [Explicit and Implicit wait](#Explicit and Implicit wait)
-- [Browser Configuration](#Browser Configuration)
+- [Explicit and Implicit wait](#Waits)
+- [Browser Configuration](#Configuration)
 - [Misc](#Misc)
 
 ##Introduction
@@ -165,7 +165,7 @@ Perform checks on the full web-page
     Then I check the page contains the text "Skills"
 ```
 
-##Explicit and Implicit wait
+##Waits
 
 Implicit wait can be used simply by setting implicit wait, this will
 be used for any step definitions.
@@ -207,7 +207,7 @@ return a boolean rather than 'WebElements' have their own step definitions that 
       And I check the page does not contain the text "nosuchword" with a timeout of 2 seconds
 ```
 
-##Browser Configuration
+##Configuration
 
 Some of the driver settings can be set using step definitions, however others
 can be set using the config file browsers.xml. Unless a browser is specified when launching the browser,
