@@ -3,22 +3,21 @@
 - [Introduction](#Introduction)
 - [Getting Started](#Overview)
 - [Selection](#Selection)
-- [Navigation](#- [Misc](#Misc)
-Navigation)
+- [Navigation](Navigation)
 - [Interaction](#Interaction)
 - [Validations](#Validations)
 - [Explicit and Implicit wait](#Explicit and Implicit wait)
 - [Browser Configuration](#Browser Configuration)
-
+- [Misc](#Misc)
 
 ##Introduction
 
-The goal of <WORKING TITLE> is to make writing automated tests as seamlessly and user-friendly as possible -
+The goal of this project is to make writing automated tests as seamlessly and user-friendly as possible -
 With a catalogue of Java code, for testing with Cucumber and Selenium.
 
 ##Overview
 
-<WORKING TITLE> uses a number of Cucumber step definitions to leverage Selenium
+This project uses a number of Cucumber step definitions to leverage Selenium
 to make automated testing easier.
 There are various step definitions to cover areas such as:
 Navigation
