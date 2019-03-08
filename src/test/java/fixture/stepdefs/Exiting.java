@@ -12,9 +12,14 @@ public class Exiting {
         BrowserBase.getCurrentBrowser().takeScreenshot();
     }
 
-    @After
     @Then("^I? ?(?:close|quit)(?:(?: the)? browser)?$")
     public void closeBrowser() {
         SeleniumHandlers.closeBrowser();
+    }
+
+    @After
+    @Then("^--AUTO_CLOSE--DO NOT USE$")
+    public void autocloseBrowser() {
+        SeleniumHandlers.autoCloseBrowser();
     }
 }

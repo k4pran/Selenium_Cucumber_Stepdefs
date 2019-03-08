@@ -21,6 +21,9 @@ public class Firefox extends Browser {
     @XmlElement
     private boolean headless;
 
+    @XmlElement
+    private boolean closeOnExit;
+
     @XmlElement(name = "screenshot_on_exit")
     private boolean screenShotOnExitEnabled;
 
@@ -67,6 +70,11 @@ public class Firefox extends Browser {
     @Override
     public boolean isHeadless() {
         return headless;
+    }
+
+    @Override
+    public boolean shouldCloseOnExit() {
+        return closeOnExit;
     }
 
     @Override

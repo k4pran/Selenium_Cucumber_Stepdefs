@@ -18,6 +18,18 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
+/**
+ * Implements functionality of the step definitions.
+ * Actions are performed on the selectedElement by default.
+ *
+ * When Selecting elements, if an element is already selected, the search will look for elements relative to
+ * the currently selected element. If no element is currently selected then the whole DOM will be searched.
+ *
+ * Explicit and implicit wait when set will be used on applicable handlers until they are disabled. i.e. implicit wait
+ * is set to 0 or explicit wait is disabled. If a search method returns multiple elements explicit wait will wait for
+ * all elements to be visible, present etc if applicable.
+ */
+
 public class SeleniumHandlers {
 
     private final static org.apache.log4j.Logger logger = Logger.getLogger(SeleniumHandlers.class);
@@ -36,7 +48,11 @@ public class SeleniumHandlers {
         SeleniumHandlers.selectedElements = new ArrayList<>();
     }
 
-    public static void openBrowser(String browserName) throws Throwable {
+    /**
+     * Browsers will be loaded from the config before any tests run and can be selected using this method
+     * @param browserName The name of the browser which should be defined as a name attribute in config
+     */
+    public static void openBrowser(String browserName) {
         BrowserBase.selectBrowser(browserName);
         openBrowser();
     }
@@ -61,21 +77,43 @@ public class SeleniumHandlers {
         logger.info("Implicit wait set to " + seconds + " seconds");
     }
 
+    /**
+     * Will only be applied to wait for individual elements, unlike other wait conditions that
+     * will wait for multiple elements if multiple elements are being selected
+     * After being called it must be explicitly disabled by calling the relevant method if you
+     * no longer want to use it.
+     * @param timout in seconds
+     */
     public static void setExplicitWaitToClickable(int timout) {
         explicitWait = ExplicitWait.CLICKABLE;
         explicitWaitTimeout = timout;
     }
 
+    /**
+     * Will be automatically applied to multiple elements if multiple elements are being selected
+     * After being called it must be explicitly disabled by calling the relevant method if you
+     * no longer want to use it.
+     * @param timout in seconds
+     */
     public static void setExplicitWaitToPresent(int timout) {
         explicitWait = ExplicitWait.PRESENT;
         explicitWaitTimeout = timout;
     }
 
+    /**
+     * Will be automatically applied to multiple elements if multiple elements are being selected
+     * After being called it must be explicitly disabled by calling the relevant method if you
+     * no longer want to use it.
+     * @param timout in seconds
+     */
     public static void setExplicitWaitToVisibility(int timout) {
         explicitWait = ExplicitWait.VISIBLE;
         explicitWaitTimeout = timout;
     }
 
+    /**
+     * Disable explicit wait
+     */
     public static void clearExplicitWait() {
         explicitWait = null;
         explicitWaitTimeout = 0;
@@ -83,7 +121,6 @@ public class SeleniumHandlers {
 
     /**
      * Opens a url
-     *
      * @param url should be a fully qualified url such as https://www.google.com rather than google.com
      */
     public static void goToUrl(String url) {
@@ -98,7 +135,10 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementByCss(String locator, String alias) throws NoSuchElementException {
@@ -121,6 +161,8 @@ public class SeleniumHandlers {
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -139,7 +181,10 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementByXpath(String locator, String alias) throws NoSuchElementException {
@@ -162,6 +207,8 @@ public class SeleniumHandlers {
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -180,7 +227,10 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementById(String locator, String alias) throws NoSuchElementException {
@@ -201,7 +251,10 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementByTag(String locator, String alias) throws NoSuchElementException {
@@ -224,6 +277,8 @@ public class SeleniumHandlers {
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -243,7 +298,10 @@ public class SeleniumHandlers {
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      * If multiple elements are found the first element will be assigned to selectedElement
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementByClassName(String locator, String alias) throws NoSuchElementException {
@@ -266,6 +324,8 @@ public class SeleniumHandlers {
      * Selenium returns an empty list if no elements found, however NoSuchElementException is thrown to
      * remain consistent with the selectElementBy... methods.
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
      * @throws NoSuchElementException when no element is not found
      */
@@ -284,7 +344,10 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementByLinkText(String locator, String alias) throws NoSuchElementException {
@@ -305,7 +368,10 @@ public class SeleniumHandlers {
      * Selected element will be stored in selectedElement which is the webElement used by default for most step defs
      * An exception is thrown if no element is found and the value of selectedElement will remain unchanged
      *
+     * If explicit wait is not null it will be used where applicable
+     *
      * @param locator a string that targets an element in the dom.
+     * @param alias (optional) add an alias to the element and a reference will be saved in namedElements
      * @throws NoSuchElementException when no element is not found
      */
     public static void selectElementByPartialLinkText(String locator, String alias) throws NoSuchElementException {
@@ -349,6 +415,10 @@ public class SeleniumHandlers {
         selectedElement = selectedElements.get(index);
     }
 
+    /**
+     * Filters the selectedElements by removing elements that are not found using an xpath expression
+     * @param filter the xpath expression
+     */
     public static void filterSelectedElementsByXPath(String filter) {
 
         if (explicitWait != null) {
@@ -369,7 +439,11 @@ public class SeleniumHandlers {
         selectedElements.removeIf(element -> element.findElements(By.xpath(filter)).size() == 0);
     }
 
-    public static void filterSelectedElementsByText(String filterText) {
+    /**
+     * Filters elements from selectedElements if their descendents do not contain filterText
+     * @param filterText text to be searched
+     */
+    public static void filterSelectedElementsDescendentsText(String filterText) {
         if (explicitWait != null) {
 
             int i = selectedElements.size();
@@ -431,25 +505,15 @@ public class SeleniumHandlers {
         selectedElement.sendKeys(text);
     }
 
-    public static void pressEnterKey() {
-        selectedElement.sendKeys(Keys.ENTER);
-    }
-
     public static void pressEnter() {
-        selectedElement.sendKeys(Keys.ENTER);
-    }
-
-    public static void pressEnterKeyOnDropDown() {
         Actions actions = new Actions(driver);
         actions.sendKeys(Keys.ENTER);
-        actions.perform();
-    }
+        actions.perform();    }
 
-    public static void pressArrowDownKey() {
-        selectedElement.sendKeys(Keys.ARROW_DOWN);
-    }
-
-    public static void pressArrowDownKeyTimes(int times) {
+    public static void pressArrowDownKeyTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.ARROW_DOWN);
@@ -457,11 +521,10 @@ public class SeleniumHandlers {
         actions.perform();
     }
 
-    public static void pressArrowUpKey() {
-        selectedElement.sendKeys(Keys.ARROW_UP);
-    }
-
-    public static void pressArrowKeyUpTimes(int times) {
+    public static void pressArrowKeyUpTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.ARROW_UP);
@@ -469,11 +532,10 @@ public class SeleniumHandlers {
         actions.perform();
     }
 
-    public static void pressArrowLeftKey() {
-        selectedElement.sendKeys(Keys.ARROW_LEFT);
-    }
-
-    public static void pressArrowLeftKeyTimes(int times) {
+    public static void pressArrowLeftKeyTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.ARROW_LEFT);
@@ -481,11 +543,10 @@ public class SeleniumHandlers {
         actions.perform();
     }
 
-    public static void pressArrowRightKey() {
-        selectedElement.sendKeys(Keys.ARROW_RIGHT);
-    }
-
-    public static void pressArrowRightKeyTimes(int times) {
+    public static void pressArrowRightKeyTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.ARROW_RIGHT);
@@ -493,31 +554,14 @@ public class SeleniumHandlers {
         actions.perform();
     }
 
-    public static void pressArrowDownKeyAndEnter() {
-        selectedElement.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
-    }
-
-    public static void pressArrowUpKeyAndEnter() {
-        selectedElement.sendKeys(Keys.ARROW_UP, Keys.ENTER);
-    }
-
-    public static void pressArrowLeftKeyAndEnter() {
-        selectedElement.sendKeys(Keys.ARROW_LEFT, Keys.ENTER);
-    }
-
-    public static void pressArrowRightKeyAndEnter() {
-        selectedElement.sendKeys(Keys.ARROW_RIGHT, Keys.ENTER);
-    }
-
     /**
      * OtherKeys
      */
 
-    public static void pressBackspace() {
-        selectedElement.sendKeys(Keys.BACK_SPACE);
-    }
-
-    public static void pressBackspaceTimes(int times) {
+    public static void pressBackspaceTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.BACK_SPACE);
@@ -541,11 +585,10 @@ public class SeleniumHandlers {
         selectedElement.sendKeys(Keys.SHIFT);
     }
 
-    public static void pressSpacebarKey(){
-        selectedElement.sendKeys(Keys.SPACE);
-    }
-
-    public static void pressSpacebarTimes(int times) {
+    public static void pressSpacebarTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.SPACE);
@@ -553,11 +596,10 @@ public class SeleniumHandlers {
         actions.perform();
     }
 
-    public static void pressTabKey(){
-        selectedElement.sendKeys(Keys.TAB);
-    }
-
-    public static void pressTabKeyTimes(int times) {
+    public static void pressTabKeyTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.TAB);
@@ -577,11 +619,10 @@ public class SeleniumHandlers {
         selectedElement.sendKeys(Keys.INSERT);
     }
 
-    public static void pressPageUpKey(){
-        selectedElement.sendKeys(Keys.PAGE_UP);
-    }
-
-    public static void pressPageUpTimes(int times) {
+    public static void pressPageUpTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.PAGE_UP);
@@ -589,11 +630,10 @@ public class SeleniumHandlers {
         actions.perform();
     }
 
-    public static void pressPageDownKey(){
-        selectedElement.sendKeys(Keys.PAGE_DOWN);
-    }
-
-    public static void pressPageDownTimes(int times) {
+    public static void pressPageDownTimes(Integer times) {
+        if (times == null) {
+            times = 1;
+        }
         Actions actions = new Actions(driver);
         for (int i = 0; i < times; i++) {
             actions.sendKeys(Keys.PAGE_DOWN);
@@ -752,7 +792,7 @@ public class SeleniumHandlers {
                 selectedElement.findElements(By.xpath(".//*[contains(text(),'" + expectedText + "')]")).size() > 0);
     }
 
-    public static void iCheckAttributeExists(String attribute) {
+    public static void checkAttributeExists(String attribute) {
         String expectedAttribute = selectedElement.getAttribute(attribute);
         assertNotNull(expectedAttribute);
     }
@@ -870,6 +910,13 @@ public class SeleniumHandlers {
 
     public static void closeBrowser() {
         if (BrowserBase.getCurrentBrowser().getDriver() != null) {
+            logger.info("Performing closing down operations...");
+            BrowserBase.getCurrentBrowser().close();
+        }
+    }
+
+    public static void autoCloseBrowser() {
+        if (BrowserBase.getCurrentBrowser().shouldCloseOnExit() && BrowserBase.getCurrentBrowser().getDriver() != null) {
             logger.info("Performing closing down operations...");
             BrowserBase.getCurrentBrowser().close();
         }
