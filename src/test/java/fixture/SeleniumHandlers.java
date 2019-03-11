@@ -427,14 +427,13 @@ public class SeleniumHandlers {
             while (i != 0) {
                 i--;
                 try {
-                    List<WebElement> ignore = selectedElement == null ?
-                            explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filter + "')]", explicitWaitTimeout) :
-                            explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filter + "')]", explicitWaitTimeout, selectedElement);
+                    List<WebElement> ignore = explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filter + "')]", explicitWaitTimeout, selectedElement);
 
-                } catch (TimeoutException e) {
+                } catch (TimeoutException | NoSuchElementException | StaleElementReferenceException e) {
                     selectedElements.remove(i);
                 }
             }
+            return;
         }
         selectedElements.removeIf(element -> element.findElements(By.xpath(filter)).size() == 0);
     }
@@ -450,13 +449,12 @@ public class SeleniumHandlers {
             while (i != 0) {
                 i--;
                 try {
-                    List<WebElement> ignore = selectedElement == null ?
-                            explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout) :
-                            explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout, selectedElement);
-                } catch (TimeoutException e) {
+                    List<WebElement> ignore = explicitWait.applyWait(driver, SelectorMethod.XPATH, ".//*[contains(text(),'" + filterText + "')]", explicitWaitTimeout, selectedElements.get(i));
+                } catch (TimeoutException | NoSuchElementException | StaleElementReferenceException e) {
                     selectedElements.remove(i);
                 }
             }
+            return;
         }
         selectedElements.removeIf(element -> element.findElements(By.xpath(".//*[contains(text(),'" + filterText + "')]")).size() == 0);
     }
