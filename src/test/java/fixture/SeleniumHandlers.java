@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,15 +29,20 @@ public class SeleniumHandlers {
     private static List<WebElement> selectedElements;
     private static WebElement selectedElement;
 
+    private static String attributeValue;
+    private static HashMap<String, WebElement> attributesWebElement;
+
     private static ExplicitWait explicitWait;
     private static long explicitWaitTimeout;
+
+    private static Integer index;
 
     static {
         SeleniumHandlers.namedElements = new HashMap<>();
         SeleniumHandlers.selectedElements = new ArrayList<>();
     }
 
-    public static void openBrowser(String browserName) throws Throwable {
+    public static void openBrowser(String browserName){
         BrowserBase.selectBrowser(browserName);
         openBrowser();
     }
@@ -322,6 +328,18 @@ public class SeleniumHandlers {
         }
     }
 
+    public static void selectElementByContainedText(String text, String alias){
+        for(WebElement element : selectedElements){
+            if(element.getText().contains(text)){
+                selectedElement = element;
+                break;
+            }
+        }
+        if(alias != null){
+            namedElements.put(alias, selectedElement);
+        }
+    }
+
     public static void selectFromDropdownByLabel(String label) {
         Select select = new Select(selectedElement);
         select.deselectAll();
@@ -346,6 +364,10 @@ public class SeleniumHandlers {
      * @param index to select from selectedElements
      */
     public static void selectFromElements(Integer index) {
+        selectedElement = selectedElements.get(index);
+    }
+
+    public static void getElementAtIndex() {
         selectedElement = selectedElements.get(index);
     }
 
@@ -385,6 +407,115 @@ public class SeleniumHandlers {
             }
         }
         selectedElements.removeIf(element -> element.findElements(By.xpath(".//*[contains(text(),'" + filterText + "')]")).size() == 0);
+    }
+
+    /**
+     * Select convenience methods for navigating tree structure of nodes
+     */
+
+    public static void getAllChildrenForSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./child::*"));
+    }
+
+    public static void getAllChildrenForParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../child::*"));
+    }
+
+    public static void getAllDescendantsForSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./descendant::*"));
+    }
+
+    public static void getAllDescendantsIncludingSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./descendant-or-self::*"));
+    }
+
+    public static void getAllDescendantsForParentofSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../descendant::*"));
+    }
+
+    public static void getEverythingFollowingTheSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./following::*"));
+    }
+
+    public static void getEverythingFollowingTheParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../following::*"));
+    }
+
+    public static void getTheSiblingsFollowingTheSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./following-sibling::*"));
+    }
+
+    public static void getTheSiblingsFollowingTheParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../following-sibling::*"));
+    }
+
+    public static void getTheSiblingsPrecedingTheSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./preceding-sibling::*"));
+    }
+
+    public static void getTheSiblingsPrecedingTheParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../preceding-sibling::*"));
+    }
+
+    public static void getTheParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./parent::*"));
+    }
+
+    public static void getTheParentOfTheParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../parent::*"));
+    }
+
+    public static void getAllAncestorsForSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./ancestor::*"));
+    }
+
+    public static void getAllAncestorsForParentOfSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("../ancestor::*"));
+    }
+
+    public static void getAllAncestorsIncludingTheSelectedElement(){
+        selectedElements = selectedElement.findElements(By.xpath("./ancestor-or-self::*"));
+    }
+
+    /**
+     * Select Properties Methods
+     * @param field
+     */
+
+    public static void getIndex(String field){
+        for(WebElement element : selectedElements){
+            if (element.getText().equals(field)){
+                index = selectedElements.indexOf(element);
+            }
+        }
+    }
+
+    public static void getAttribute(String attributeName, String alias){
+        attributeValue = alias != null ? namedElements.get(alias).getAttribute(attributeName) : selectedElement.getAttribute(attributeName);
+        if(alias!=null) {
+            attributesWebElement.put(attributeName, namedElements.get(alias));
+        }
+        else{attributesWebElement.put(attributeName, selectedElement);}
+    }
+
+    /**
+     * Change Properties Methods
+     * @param attributeName
+     * @param alias
+     * @param value
+     */
+
+    public static void changeAttribute(String attributeName, @Nullable String alias, String value){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        if(alias != null){
+            js.executeScript("argument[0].setAttribute(argument[1],argument[2])",namedElements.get(alias), attributeName, value);
+        }
+        else{js.executeScript("argument[0].setAttribute(argument[1],argument[2])", selectedElement, attributeName, value);}
+    }
+
+    public static void changeAttributeOf(String attribute, String value){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("argument[0].setAttribute(argument[1],argument[2])", attributesWebElement.get(attribute), attribute, value);
     }
 
     /**
