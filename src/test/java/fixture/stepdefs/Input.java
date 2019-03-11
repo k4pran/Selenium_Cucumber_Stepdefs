@@ -108,5 +108,4 @@ public class Input {
     @When("^I? press k12 Key$")
     public void pressF12Key(){SeleniumHandlers.pressF12Key();}
 
-    /**End of sendKeys*/
 }

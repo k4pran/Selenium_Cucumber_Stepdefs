@@ -3,6 +3,7 @@ package fixture.stepdefs;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import fixture.SeleniumHandlers;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
 public class Selection {
@@ -137,6 +138,11 @@ public class Selection {
         SeleniumHandlers.selectElementByPartialLinkText(locator, alias);
     }
 
+    @When("^I select element from elements by contained text \"([^\"]*)\"(?: as (\"[^\"]*\")?)?$")
+    public void selectElementByContainedText(String text, String alias){
+        SeleniumHandlers.selectElementByContainedText(text, alias);
+    }
+
     @When("^I? ?select element from dropdown by (?:the)? ?label \"([^\"]*)\"$")
     public void selectFromDropdownByLabel(String label) {
         SeleniumHandlers.selectFromDropdownByLabel(label);
@@ -161,6 +167,11 @@ public class Selection {
         SeleniumHandlers.selectFromElements(index);
     }
 
+    @When("^I select element at current index from selected elements$")
+    public void checkEntryInSpecificCell() {
+        SeleniumHandlers.getElementAtIndex();
+    }
+
     @When("^I? ?filter selected elements by xpath using value \"([^\"]*)\"$")
     public void filterSelectedElementsByXPath(String filter) {
         SeleniumHandlers.filterSelectedElementsByXPath(filter);
@@ -170,6 +181,89 @@ public class Selection {
     public void filterSelectedElementsDescendentsText(String filterText) {
         SeleniumHandlers.filterSelectedElementsDescendentsText(filterText);
     }
+
+    @When("^I get the children of selected element$")
+    public void getChildrenForSelectedElement(){
+        SeleniumHandlers.getAllChildrenForSelectedElement();
+    }
+
+    @When("^I get the children of the parent of the selected element$")
+    public void getAllChildrenForParentOfSelectedElement(){
+        SeleniumHandlers.getAllChildrenForParentOfSelectedElement();
+    }
+
+    @When("^I get the descendants of the selected element$")
+    public void getAllDescendantsForSelectedElement(){
+        SeleniumHandlers.getAllDescendantsForSelectedElement();
+    }
+
+    @When("^I get both the selected elements and all it's selected elements descendants$")
+    public void getAllDescendantsIncludingSelectedElement(){
+        SeleniumHandlers.getAllDescendantsIncludingSelectedElement();
+    }
+
+    @When("^I get all the descendants for the parent of the selected element$")
+    public void getAllDescendantsForParentofSelectedElement(){
+        SeleniumHandlers.getAllDescendantsForParentofSelectedElement();
+    }
+
+    @When("^I get everything following the closing tag of the selected element$")
+    public void getEverythingFollowingTheSelectedElement(){
+        SeleniumHandlers.getEverythingFollowingTheSelectedElement();
+    }
+
+    @When("^I get everything following the closing tag of the parent of the selected element$")
+    public void getEverythingFollowingTheParentOfSelectedElement(){
+        SeleniumHandlers.getEverythingFollowingTheParentOfSelectedElement();
+    }
+
+    @When("^I get all siblings following the selected element$")
+    public void getTheSiblingsFollowingTheSelectedElement(){
+        SeleniumHandlers.getTheSiblingsFollowingTheSelectedElement();
+    }
+
+    @When("^I get all siblings following the parent of the selected element$")
+    public void getTheSiblingsFollowingTheParentOfSelectedElement(){
+        SeleniumHandlers.getTheSiblingsFollowingTheParentOfSelectedElement();
+    }
+
+    @When("^I get all siblings preceding the selected element$")
+    public void getTheSiblingsPrecedingTheSelectedElement(){
+        SeleniumHandlers.getTheSiblingsPrecedingTheSelectedElement();
+    }
+
+    @When("^I get all siblings preceding the parent of the selected element$")
+    public void getTheSiblingsPrecedingTheParentOfSelectedElement(){
+        SeleniumHandlers.getTheSiblingsPrecedingTheParentOfSelectedElement();
+    }
+
+    @When("^I get the parent of the selected element$")
+    public void getTheParentOfSelectedElement(){
+        SeleniumHandlers.getTheParentOfSelectedElement();
+    }
+
+    @When("^I get the grandparent of the selected element$")
+    public void getTheParentOfTheParentOfSelectedElement(){
+        SeleniumHandlers.getTheParentOfTheParentOfSelectedElement();
+    }
+
+    @When("^I get all ancestors of the selected element$")
+    public void getAllAncestorsForSelectedElement(){
+        SeleniumHandlers.getAllAncestorsForSelectedElement();
+    }
+
+    @When("^I get all ancestors of the parent of the selected element$")
+    public void getAllAncestorsForParentOfSelectedElement(){
+        SeleniumHandlers.getAllAncestorsForParentOfSelectedElement();
+    }
+
+    @When("^I get the selected element and all its ancestors$")
+    public void getAllAncestorsIncludingTheSelectedElement(){
+        SeleniumHandlers.getAllAncestorsIncludingTheSelectedElement();
+    }
+
+
+
 
     /**
      * If the named element exists it will become the selectedElement so that actions can be performed on it
