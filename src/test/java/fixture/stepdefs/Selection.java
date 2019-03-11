@@ -178,8 +178,8 @@ public class Selection {
     }
 
     @When("^I? ?filter selected elements based on if their descendents contain the text \"([^\"]*)\"$")
-    public void filterSelectedElementsByText(String filterText) {
-        SeleniumHandlers.filterSelectedElementsByText(filterText);
+    public void filterSelectedElementsDescendentsText(String filterText) {
+        SeleniumHandlers.filterSelectedElementsDescendentsText(filterText);
     }
 
     @When("^I get the children of selected element$")

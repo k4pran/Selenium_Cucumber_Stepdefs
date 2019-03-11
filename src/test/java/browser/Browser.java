@@ -1,5 +1,6 @@
 package browser;
 
+import fixture.SeleniumException;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
@@ -12,6 +13,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Base class for all browsers.
+ * This class should be extended when adding another browser
+ */
 @XmlRootElement(name="Browser")
 public abstract class Browser {
 
@@ -22,11 +27,13 @@ public abstract class Browser {
     public abstract String getDriverPath();
     public abstract WebDriver getDriver();
     public abstract boolean isHeadless();
+    public abstract boolean shouldCloseOnExit();
     public abstract long getImplicitWait();
     public abstract long getPageTimeout();
     public abstract long getScriptTimeout();
     public abstract boolean getScreenShotOnExitEnabled();
     public abstract void close();
+
 
     public void takeScreenshot() {
         File screenshot = ((TakesScreenshot) getDriver())

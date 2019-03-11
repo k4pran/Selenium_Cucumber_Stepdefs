@@ -62,7 +62,7 @@ public class Validations {
 
     @Then("^I? ?check (?:the)? ?attribute \"([^\"]*)\" exists$")
     public void iCheckAttributeExists(String attribute) {
-        SeleniumHandlers.iCheckAttributeExists(attribute);
+        SeleniumHandlers.checkAttributeExists(attribute);
     }
 
     @Then("^I? ?check (?:the)? ?element's attribute \"([^\"]*)\" is equal to \"([^\"]*)\"$")

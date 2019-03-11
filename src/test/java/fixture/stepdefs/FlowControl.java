@@ -78,7 +78,7 @@ public class FlowControl {
         clearExplicitWait();
     }
 
-    @Given("Explicit wait is disabled")
+    @Given("explicit wait is disabled")
     public void clearExplicitWaitAlias3() {
         clearExplicitWait();
     }
