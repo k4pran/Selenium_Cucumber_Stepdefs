@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 public class Properties {
 
     @When("^I get index for element amongst selected elements containing \"([^\"]*)\"$")
-    public void getIndex(String text){
-        SeleniumHandlers.getIndex(text);
+    public void getIndexOfElementContaining(String text){
+        SeleniumHandlers.getIndexOfElementContaining(text);
     }
 
     @When("^I get the value of attribute \"([^\"]*)\" from the selected element (?: named (\"[^\"]*\")?)?$")

@@ -38,11 +38,12 @@ public class SeleniumHandlers {
     private static WebDriver driver;
 
     private static HashMap<String, WebElement> namedElements;
+    private static HashMap<String, String> namedValues;
     private static List<WebElement> selectedElements;
     private static WebElement selectedElement;
 
     private static String attributeValue;
-    private static HashMap<String, WebElement> attributesWebElement;
+    private static HashMap<String, WebElement> attributesWebElements;
 
     private static ExplicitWait explicitWait;
     private static long explicitWaitTimeout;
@@ -52,6 +53,8 @@ public class SeleniumHandlers {
     static {
         SeleniumHandlers.namedElements = new HashMap<>();
         SeleniumHandlers.selectedElements = new ArrayList<>();
+        SeleniumHandlers.attributesWebElements = new HashMap<>();
+        SeleniumHandlers.namedValues = new HashMap<>();
     }
 
     /**
@@ -154,10 +157,11 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.CSS, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.CSS, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(locator)) :
-                selectedElement.findElement(By.cssSelector(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.cssSelector(locator)) :
+                    selectedElement.findElement(By.cssSelector(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
@@ -200,10 +204,11 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.XPATH, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.XPATH, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.xpath(locator)) :
-                selectedElement.findElement(By.xpath(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.xpath(locator)) :
+                    selectedElement.findElement(By.xpath(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
@@ -246,10 +251,11 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.ID, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.ID, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.id(locator)) :
-                selectedElement.findElement(By.id(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.id(locator)) :
+                    selectedElement.findElement(By.id(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
@@ -270,10 +276,11 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.TAG, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.TAG, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.tagName(locator)) :
-                selectedElement.findElement(By.tagName(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.tagName(locator)) :
+                    selectedElement.findElement(By.tagName(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
@@ -317,10 +324,11 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.CLASS, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.CLASS, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.className(locator)) :
-                selectedElement.findElement(By.className(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.className(locator)) :
+                    selectedElement.findElement(By.className(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
@@ -363,10 +371,11 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.LINK, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.LINK, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.linkText(locator)) :
-                selectedElement.findElement(By.linkText(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.linkText(locator)) :
+                    selectedElement.findElement(By.linkText(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
@@ -387,23 +396,24 @@ public class SeleniumHandlers {
             selectedElement = selectedElement == null ?
                     explicitWait.applyWait(driver, SelectorMethod.PARTIAL_LINK, locator, explicitWaitTimeout).get(0) :
                     explicitWait.applyWait(driver, SelectorMethod.PARTIAL_LINK, locator, explicitWaitTimeout, selectedElement).get(0);
-            return;
         }
-        selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(locator)) :
-                selectedElement.findElement(By.partialLinkText(locator));
+        else {
+            selectedElement = selectedElement == null ? driver.findElement(By.partialLinkText(locator)) :
+                    selectedElement.findElement(By.partialLinkText(locator));
+        }
         if (alias != null) {
             namedElements.put(alias, selectedElement);
         }
     }
 
-    public static void selectElementByContainedText(String text, String alias){
-        for(WebElement element : selectedElements){
-            if(element.getText().contains(text)){
+    public static void selectFirstElementByContainedText(String text, String alias) {
+        for(WebElement element : selectedElements) {
+            if(element.getText().contains(text)) {
                 selectedElement = element;
                 break;
             }
         }
-        if(alias != null){
+        if(alias != null) {
             namedElements.put(alias, selectedElement);
         }
     }
@@ -433,6 +443,18 @@ public class SeleniumHandlers {
      */
     public static void selectFromElements(Integer index) {
         selectedElement = selectedElements.get(index);
+    }
+
+    public static void saveSelectedElementsInnerTextAs(String alias) {
+        namedValues.put(alias, selectedElement.getText());
+    }
+
+    public static void saveSelectedElementsAttributeValueAs(String attributeName, String alias) {
+        namedValues.put(alias, selectedElement.getAttribute(attributeName));
+    }
+
+    public static void saveSelectedElementsCountAs(String alias) {
+        namedValues.put(alias, Integer.toString(selectedElements.size()));
     }
 
     public static void getElementAtIndex() {
@@ -554,23 +576,24 @@ public class SeleniumHandlers {
 
     /**
      * Select Properties Methods
-     * @param field
+     * @param text
      */
 
-    public static void getIndex(String field){
-        for(WebElement element : selectedElements){
-            if (element.getText().equals(field)){
+    public static void getIndexOfElementContaining(String text) {
+        for(WebElement element : selectedElements) {
+            if (element.getText().equals(text)) {
                 index = selectedElements.indexOf(element);
             }
         }
     }
 
-    public static void getAttribute(String attributeName, String alias){
+    public static void getAttribute(String attributeName, String alias) {
         attributeValue = alias != null ? namedElements.get(alias).getAttribute(attributeName) : selectedElement.getAttribute(attributeName);
         if(alias!=null) {
-            attributesWebElement.put(attributeName, namedElements.get(alias));
+            attributesWebElements.put(attributeName, namedElements.get(alias));
         }
-        else{attributesWebElement.put(attributeName, selectedElement);}
+        else{
+            attributesWebElements.put(attributeName, selectedElement);}
     }
 
     /**
@@ -579,7 +602,6 @@ public class SeleniumHandlers {
      * @param alias
      * @param value
      */
-
     public static void changeAttribute(String attributeName, @Nullable String alias, String value){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         if(alias != null){
@@ -590,7 +612,7 @@ public class SeleniumHandlers {
 
     public static void changeAttributeOf(String attribute, String value){
         JavascriptExecutor js = (JavascriptExecutor) driver;
-            js.executeScript("argument[0].setAttribute(argument[1],argument[2])", attributesWebElement.get(attribute), attribute, value);
+        js.executeScript("argument[0].setAttribute(argument[1],argument[2])", attributesWebElements.get(attribute), attribute, value);
     }
 
     /**
@@ -1018,6 +1040,18 @@ public class SeleniumHandlers {
                 namedElements.get(secondElement).getAttribute(secondAttr));
     }
 
+    public static void checkNamedValuesAreEqual(String firstAlias, String secondAlias) {
+        Assert.assertEquals(namedValues.get(firstAlias), namedValues.get(secondAlias));
+    }
+
+    public static void checkNamedValueIsLessThan(String firstAlias, String secondAlias) {
+        Assert.assertTrue(Integer.parseInt(namedValues.get(firstAlias)) < Integer.parseInt(namedValues.get(secondAlias)));
+    }
+
+    public static void checkNamedValueIsGreaterThan(String firstAlias, String secondAlias) {
+        Assert.assertTrue(Integer.parseInt(namedValues.get(firstAlias)) > Integer.parseInt(namedValues.get(secondAlias)));
+    }
+
     /**
      * Clears only the single selectedElement
      */
@@ -1038,6 +1072,10 @@ public class SeleniumHandlers {
      */
     public static void clearNamedElements() {
         namedElements = new HashMap<>();
+    }
+
+    public static void clearNamedValues() {
+        namedValues = new HashMap<>();
     }
 
     public static void closeBrowser() {

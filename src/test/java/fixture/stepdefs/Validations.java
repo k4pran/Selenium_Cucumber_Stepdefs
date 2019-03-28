@@ -159,7 +159,22 @@ public class Validations {
     @Then("^I? ?check the element \"([^\"]*)\"'s attribute \"([^\"]*)\"'s value is equal to " +
             "the element \"([^\"]*)\"'s attribute \"([^\"]*)\"'s value$")
     public void checkTwoElementsAttrValIsEqual(String firstElement, String firstAttr, String secondElement,
-                                            String secondAttr) {
+                                               String secondAttr) {
         SeleniumHandlers.checkTwoElementsAttrValIsEqual(firstElement, firstAttr, secondElement, secondAttr);
+    }
+
+    @Then("^I? ?check the named value \"([^\"]*)\" is equal to the named value \"([^\"]*)\"$")
+    public void checkNamedValuesAreEqual(String firstAlias, String secondAlias) {
+        SeleniumHandlers.checkNamedValuesAreEqual(firstAlias, secondAlias);
+    }
+
+    @Then("^I? ?check the named value \"([^\"]*)\" is less than the named value \"([^\"]*)\"$")
+    public void checkNamedValueIsLessThan(String firstAlias, String secondAlias) {
+        SeleniumHandlers.checkNamedValueIsLessThan(firstAlias, secondAlias);
+    }
+
+    @Then("^I? ?check the named value \"([^\"]*)\" is greater than the named value \"([^\"]*)\"$")
+    public void checkNamedValueIsGreaterThan(String firstAlias, String secondAlias) {
+        SeleniumHandlers.checkNamedValueIsGreaterThan(firstAlias, secondAlias);
     }
 }
